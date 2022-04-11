@@ -1,40 +1,73 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components";
+
+import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as postActions } from "./redux/modules/post";
+
 import Button from "./elements/Button";
 
-const Main = () => {
+const Main = (props) => {
+
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const post_list = useSelector((state) => state.post.list);
+
+  console.log("Main : post_list", post_list)
+
+  const user = useSelector((state) => state.user.user)
   const is_login = useSelector((state) => state.user.is_login);
-  console.log(is_login);
+  console.log("Main : user", user, is_login);
+
+  React.useEffect(() => {
+    dispatch(postActions.getPostDB());
+  }, [dispatch])
+
   if (is_login) {
     return (
       <Container>
-        <Postbox>
-          <div>
-            <p>토이프로젝트 팀원 구인합니다!</p>
-            <span>프론트엔드 2 | 백엔드 3</span>
-          </div>
-          <div>
-            <span>작성자</span>
-            <Button>모집중</Button>
-          </div>
-        </Postbox>
-        <Addbutton>글쓰기</Addbutton>
+        {post_list.map((post, idx) => {
+          return (
+            <Postbox key={idx} onClick={() => {
+              history.push("/post/" + post.postId)
+            }}>
+              <div>
+                <p>{post.title}</p>
+                <span>프론트엔드 {post.frontNum}명 | 백엔드 {post.backNum}명 </span>
+              </div>
+              <div>
+                <span>{post.nickName}</span>
+                <Button>모집중</Button>
+              </div>
+            </Postbox>
+          );
+        })}
+        <Button type="circle" size="S" onClick={() => {
+          history.push("/write");
+        }}>+</Button>
       </Container>
     );
   }
+
   return (
     <Container>
-      <Postbox>
-        <div>
-          <p>토이프로젝트 팀원 구인합니다!</p>
-          <span>프론트엔드 2 | 백엔드 3</span>
-        </div>
-        <div>
-          <span>작성자</span>
-          <Button>모집중</Button>
-        </div>
-      </Postbox>
+      {post_list.map((post, idx) => {
+        return (
+          <Postbox key={idx} onClick={() => {
+            history.push("/post/" + post.postId)
+          }}>
+            <div>
+              <p>{post.title}</p>
+              <span>프론트엔드 {post.frontNum}명 | 백엔드 {post.backNum}명 </span>
+            </div>
+            <div>
+              <span>{post.nickName}</span>
+              <Button>모집중</Button>
+            </div>
+          </Postbox>
+        );
+      })}
     </Container>
   );
 };

@@ -1,13 +1,13 @@
 import React from "react";
-import CmtList from "../components/CmtList";
+
 import CmtWrite from "../components/CmtWrite";
 import PostContent from "../components/PostContent";
+import CmtList from "../components/CmtList";
 import { Badge, Grid } from "../elements";
 
 
-
-
 const PostDetail = () => {
+
 
     return (
         <React.Fragment>
@@ -15,9 +15,6 @@ const PostDetail = () => {
                 <Badge type="모집중" />
                 <PostContent />
                 <Grid>
-                    <CmtList />
-                    <CmtList />
-                    <CmtList />
                     <CmtList />
                 </Grid>
                 <Grid>

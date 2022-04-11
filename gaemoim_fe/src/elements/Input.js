@@ -4,15 +4,15 @@ import Button from "./Button";
 
 const Input = (props) => {
 
-  const { type, label, size, placeholder } = props;
+  const { type, label, size, placeholder, _ref} = props;
 
 
 
   if (type == "line") {
     return (
       <React.Fragment>
-        <Label {...props}>{label}</Label>
-        <BlackInput {...props} />
+        <Label {...props} >{label}</Label>
+        <BlackInput {...props} ref={_ref} />
       </React.Fragment>
     );
   }
@@ -30,7 +30,7 @@ const Input = (props) => {
     return (
       <React.Fragment>
         <Label {...props}>{label}</Label>
-        <Textarea {...props} />
+        <Textarea {...props} ref={_ref} />
       </React.Fragment>
 
     );
@@ -40,7 +40,7 @@ const Input = (props) => {
 
     <React.Fragment>
       <Label>{label}</Label>
-      <InputBox {...props} />
+      <InputBox {...props} ref={_ref} />
     </React.Fragment>
 
   );
@@ -54,6 +54,7 @@ Input.defaultProps = {
   type: null,
   placeholder: null,
   size: null,
+  _onChange: null,
 }
 
 const Label = styled.label`

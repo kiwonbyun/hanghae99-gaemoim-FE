@@ -1,32 +1,38 @@
-import React, { useRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import Button from "./elements/Button";
 import { useDispatch } from "react-redux";
-import { actionCreators } from "./redux/modules/user";
+import { useHistory } from "react-router-dom";
+import { actionCreators as userAction } from "./redux/modules/user";
 
 const Login = () => {
   const dispatch = useDispatch();
-  const idref = useRef();
-  const pwref = useRef();
+  const history = useHistory();
 
-  const loginClick = () => {
-    const id = idref.current.value;
-    const pw = pwref.current.value;
+  const id = React.useRef(null);
+  const pwd = React.useRef(null);
 
-    if (id === "" || pw === "") {
-      window.alert("아이디 혹은 비밀번호가 공란입니다. 채워주세요");
-      return;
+  const login = () => {
+    const username = id.current.value;
+    const password = pwd.current.value;
+
+    const check = /^[a-z0-9]{4,12}$/;
+
+    if (!check.test(username)) {
+      return window.alert(" 아이디는 4~12자 이내의 영문 소문자와 숫자만 입력 가능합니다.  ")
     }
-    if (id.length > 12 || id.length < 4) {
-      window.alert("아이디는 4~12자 입니다.");
-      return;
+    if (password.length < 6) {
+      return window.alert(" 6자 이상의 비밀번호를 입력해주세요. ")
     }
-    if (pw < 6) {
-      window.alert("비밀번호는 6자리 이상입니다.");
-      return;
+    if (password.search(username) > -1) {
+      return window.alert("비밀번호에 아이디가 포함되어있습니다.")
     }
-    dispatch(actionCreators.logInDB(id, pw));
-  };
+
+    console.log("Login : user_data ", username, "/" , password);
+    dispatch(userAction.logInDB(username, password))
+  }
+
+
   return (
     <Container>
       <div>
@@ -34,18 +40,20 @@ const Login = () => {
       </div>
       <div>
         <label htmlFor="ID">아이디</label>
-        <input id="ID" placeholder="아이디를 입력해주세요" ref={idref}></input>
+        <input id="ID" placeholder="아이디를 입력해주세요" ref={id}></input>
         <label htmlFor="PW">비밀번호</label>
         <input
           id="PW"
           type="password"
           placeholder="비밀번호를 입력해주세요"
-          ref={pwref}
+          ref={pwd}
         ></input>
       </div>
       <div>
-        <Button onClick={loginClick}>로그인</Button>
-        <Button color="light">가입하기</Button>
+        <Button onClick={login}>로그인</Button>
+        <Button color="light" onClick={() => {
+          history.push("/");
+        }}>가입하기</Button>
       </div>
     </Container>
   );

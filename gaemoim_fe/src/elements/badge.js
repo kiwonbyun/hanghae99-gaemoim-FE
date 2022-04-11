@@ -40,7 +40,7 @@ const Bdg = styled.div`
     font-size: 0.9em;
     font-weight: 500; 
 
-    background-color: ${(props)=> props.type=="모집완료"?"#E6D5B8":"#FF9B26"};
+    background-color: ${(props)=> props.type==="모집완료"?"#E6D5B8":"#FF9B26"};
 `;
 
 

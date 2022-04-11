@@ -6,21 +6,27 @@ const Button = (props) => {
 
     const { type, size, color, children } = props;
 
-if (type === "circle") {
-    return (
-        <React.Fragment>
-            <CircleBtn {...props}>{children}</CircleBtn>
-        </React.Fragment>
-    )
-}
+    const styles = {
+        type: type,
+        size: size,
+        color: color,
+    }
 
-if (size === "XS") {
-    return (
-        <React.Fragment>
-            <SmBtn {...props}>{children}</SmBtn>
-        </React.Fragment>
-    );
-}
+    if (type === "circle") {
+        return (
+            <React.Fragment>
+                <CircleBtn {...props}>{children}</CircleBtn>
+            </React.Fragment>
+        )
+    }
+
+    if (size === "XS") {
+        return (
+            <React.Fragment>
+                <SmBtn {...props}>{children}</SmBtn>
+            </React.Fragment>
+        );
+    }
 
     return (
         <React.Fragment>
@@ -44,45 +50,47 @@ Button.defaultProps = {
 const Btn = styled.button`
     font-family: 'Pretendard-Regular';
 
-    width: ${(props)=> props.size=="S"?"100px;":"150px"};
-    height: ${(props)=> props.size=="S"?"30px;":"50px"};
+    width: ${(props) => props.size === "S" ? "100px;" : "150px"};
+    height: ${(props) => props.size === "S" ? "30px;" : "50px"};
 
     border: none;
     border-radius: 20px;
 
     color: #fff;
-    font-size: ${(props)=> props.size=="S"?"1.2em;":"1.7em"};
+    font-size: ${(props) => props.size === "S" ? "1.3em;" : "2em"};
     font-weight: 800; 
 
-    background-color: ${(props)=> props.color=="light"?"#E6D5B8":"#FF9B26"};
+    background-color: ${(props) => props.color === "light" ? "#E6D5B8" : "#FF9B26"};
 
     transition: 0.3s;
 &:hover {
-    background-color: ${(props)=> props.color=="light"?"#C2B08F":"#FF7A00"};
+    background-color: ${(props) => props.color === "light" ? "#C2B08F" : "#FF7A00"};
 }
 `;
-
 
 const CircleBtn = styled.button`
     font-family: 'Pretendard-Regular';
 
-    width: ${(props)=> props.size=="S"?"100px;":"150px"};
-    height: ${(props)=> props.size=="S"?"100px;":"150px"};
+    width: ${(props) => props.size === "S" ? "100px;" : "150px"};
+    height: ${(props) => props.size === "S" ? "100px;" : "150px"};
 
     border: none;
-    border-radius: ${(props)=> props.size=="S"?"100px;":"150px"};;
+    border-radius: ${(props) => props.size === "S" ? "100px;" : "150px"};
 
     color: #fff;
-    font-size: ${(props)=> props.size=="S"?"1.8em;":"2.3em"};
+
+    font-size: ${(props) => props.size === "S" ? "1.8em;" : "2.3em"};
     font-weight: 800; 
 
-    background-color: ${(props)=> props.color=="light"?"#E6D5B8":"#FF9B26"};
+    background-color: ${(props) => props.color === "light" ? "#E6D5B8" : "#FF9B26"};
 
     transition: 0.3s;
+
 &:hover {
-    background-color: ${(props)=> props.color=="light"?"#C2B08F":"#FF7A00"};
+    background-color: ${(props) => props.color === "light" ? "#C2B08F" : "#FF7A00"};
 }
 `;
+
 
 
 const SmBtn = styled.button`
@@ -98,12 +106,12 @@ color: #fff;
 font-size: 1em;
 font-weight: 800; 
 
-background-color: ${(props)=> props.color=="light"?"#E6D5B8":"#FF9B26"};
+background-color: ${(props) => props.color === "light" ? "#E6D5B8" : "#FF9B26"};
 
 transition: 0.3s;
 
 &:hover {
-background-color: ${(props)=> props.color=="light"?"#C2B08F":"#FF7A00"};
+background-color: ${(props) => props.color === "light" ? "#C2B08F" : "#FF7A00"};
 }
 
 

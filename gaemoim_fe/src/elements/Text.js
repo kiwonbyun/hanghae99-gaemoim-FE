@@ -4,10 +4,12 @@ import styled from "styled-components";
 
 const Text = (props) => {
 
-const {size, children, bold} = props
+const {size, children, bold, align} = props
 
 const styles = {
+  size: size,
   bold: bold,
+  align: align,
 }
 
 if(size === "L") {
@@ -34,9 +36,10 @@ if(size === "M") {
 }
 
 Text.defaultProps = {
-  type: null,
-  children: null,
-  bold: null,
+  type: "",
+  children: "",
+  bold: "",
+  align: "",
 }
 
 
@@ -57,7 +60,8 @@ const P_M = styled.p`
 const P = styled.p`
   margin: 0;
   font-size: 1.2em;
-  font-weight: ${(props) => props.bold? 800 : 500}
+  font-weight: ${(props) => props.bold? 800 : 500};
+  ${(props) => props.align? `text-align: ${props.align};` : "" };
 `
 
 

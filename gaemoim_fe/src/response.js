@@ -19,21 +19,37 @@ export const RESP = {
     },
   ],
 
-  POSTPOST: [
-    {
-      result: "success",
-    },
-  ],
+  POSTPOST: {
+    result: "success",
+  },
 
   POSTPOSTIDGET: [
     {
       postId: 1,
       title: "제목1",
-      nickName: "니노막시무스",
+      nickName: "닉네임1",
       frontNum: 2,
       backNum: 3,
       completed: false,
-      post_content: "프로젝트 같이 할 분 모집합니다!",
+      post_content: "첫번째글입니당",
+    },
+    {
+      postId: 2,
+      title: "제목2",
+      nickName: "닉네임2",
+      frontNum: 1,
+      backNum: 3,
+      completed: false,
+      post_content: "두번째글입니당",
+    },
+    {
+      postId: 3,
+      title: "제목3",
+      nickName: "닉네임3",
+      frontNum: 1,
+      backNum: 1,
+      completed: false,
+      post_content: "세번째 글이에용!",
     },
   ],
 
@@ -53,11 +69,22 @@ export const RESP = {
       comment_content: "저요저요! 댓글내용2",
     },
   ],
-  COMMENTSPOSTIDPOST: [
-    {
+
+  DETAILPOST:{
+      postId: 1,
+      title: "제목1",
+      nickName: "니노막시무스",
+      frontNum: 2,
+      backNum: 3,
+      completed: false,
+      post_content: "이건 첫 글!! 프로젝트 같이 할 분 모집합니다!",
+    },
+
+
+  COMMENTSPOSTIDPOST: {
       result: "success",
     },
-  ],
+  
 
   COMMENTSIDGET: [
     {
