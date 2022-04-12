@@ -10,16 +10,16 @@ import { RESP } from "./response";
 const Comments = (props) => {
   const dispatch = useDispatch();
   const postId = props.postId;
-  const all_comment_list = useSelector((state) => state.comment.list);
-  const comment_list = all_comment_list.filter((c) => {
-    return parseInt(c.postId) === parseInt(postId);
-  });
+  const comment_list = useSelector((state) => state.comment.list.data?.content);
+  const is_login = useSelector((state) => state.user.is_login);
   const login_user = useSelector((state) => state.user.user);
+  const login_user_position = login_user?.position;
 
   const [editing, setEditing] = useState(false);
 
   const deleteBtnClick = (e) => {
     const commentId = e.target.value;
+
     dispatch(actionCreators3.deleteCommentDB(commentId));
   };
   const editBtnClick = (e) => {
@@ -29,12 +29,12 @@ const Comments = (props) => {
   };
 
   React.useEffect(() => {
-    dispatch(actionCreators3.getCommentsDB(postId));
+    dispatch(actionCreators3.getCommentsDB(postId, login_user_position));
   }, []);
   return (
     <div>
       {editing ? <CommentEdit setEditing={setEditing} /> : null}
-      {comment_list.map((v) => {
+      {comment_list?.map((v) => {
         return (
           <OnecommentBox key={v.commentId}>
             <div>

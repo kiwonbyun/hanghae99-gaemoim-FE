@@ -9,6 +9,7 @@ const CommentInput = (props) => {
   const contentref = useRef();
   const postId = parseInt(props.postId);
   const user = useSelector((state) => state.user.user);
+  const user_position = user?.position;
   const commentBtnClick = () => {
     const username = user.username;
     const nickName = user.nickName;
@@ -18,7 +19,13 @@ const CommentInput = (props) => {
       return;
     }
     dispatch(
-      actionCreators3.addCommentDB(postId, username, nickName, comment_content)
+      actionCreators3.addCommentDB(
+        postId,
+        username,
+        nickName,
+        comment_content,
+        user_position
+      )
     );
     contentref.current.value = "";
   };

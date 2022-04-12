@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import Button from "./elements/Button";
 import { useHistory } from "react-router-dom";
 import post, { actionCreators2 } from "./redux/modules/post";
+import Pagination from "react-js-pagination";
 
 const Main = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const is_login = useSelector((state) => state.user.is_login);
-  const post_list = useSelector((state) => state.post.list);
+  const post_list = useSelector((state) => state.post.list.content);
+  const pageNum = useSelector((state) => state.post.list).totalPages;
+  const totalElementsNum = useSelector(
+    (state) => state.post.list
+  ).totalElements;
+
+  const [page, setPage] = useState(1);
+
+  const handlePageChange = (page) => {
+    setPage(page);
+    history.push(`/${page}`);
+  };
   React.useEffect(() => {
     dispatch(actionCreators2.getPostDB());
   }, []);
@@ -17,7 +29,7 @@ const Main = (props) => {
   if (is_login) {
     return (
       <Container>
-        {post_list.map((p, idx) => {
+        {post_list?.map((p, idx) => {
           return (
             <Postbox
               key={p.postId}
@@ -42,7 +54,15 @@ const Main = (props) => {
             </Postbox>
           );
         })}
-
+        <Pagination
+          activePage={page}
+          itemsCountPerPage={10}
+          totalItemsCount={totalElementsNum}
+          pageRangeDisplayed={pageNum}
+          prevPageText={"‹"}
+          nextPageText={"›"}
+          onChange={handlePageChange}
+        />
         <Addbutton
           onClick={() => {
             history.push("/write");
@@ -55,7 +75,7 @@ const Main = (props) => {
   }
   return (
     <Container>
-      {post_list.map((p, idx) => {
+      {post_list?.map((p, idx) => {
         return (
           <Postbox
             key={p.postId}

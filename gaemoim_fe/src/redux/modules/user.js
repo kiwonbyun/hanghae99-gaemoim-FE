@@ -2,6 +2,7 @@ import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axiosInstance from "../../shared/request";
 import { RESP } from "../../response";
+import jwt_decode from "jwt-decode";
 
 //action
 const SETUSER = "Setuser";
@@ -26,12 +27,13 @@ const idCheck = createAction(IDCHECK, (result) => ({ result }));
 const idCheckDB = (id) => {
   return async function (dispatch, getState, { history }) {
     try {
-      // const response = await axiosInstance.post("/api/idCheck", {
-      //   username: id,
-      // });
-      const response = RESP.IDCHECKPOST;
-      if (response.result === true) {
-        dispatch(idCheck(response.result));
+      const response = await axiosInstance.post("/api/idCheck", {
+        username: id,
+      });
+      // const response = RESP.IDCHECKPOST;
+      console.log(response);
+      if (response.data.result === true) {
+        dispatch(idCheck(response.data.result));
       } else {
         window.alert("중복된 아이디가 있습니다. 수정해주세요");
         return;
@@ -45,18 +47,18 @@ const idCheckDB = (id) => {
 const signUpDB = (id, nickName, pw, pwCf, position) => {
   return async function (dispatch, getState, { history }) {
     try {
-      // const response = await axiosInstance.post("/api/register", {
-      //   username: id,
-      //   nickName,
-      //   password: pw,
-      //   passwordCheck: pwCf,
-      //   position,
-      // });
-      const response = RESP.REGISTERPOST;
-      if (response.result === true) {
+      const response = await axiosInstance.post("/api/register", {
+        username: id,
+        nickName,
+        password: pw,
+        passwordCheck: pwCf,
+        position,
+      });
+      // const response = RESP.REGISTERPOST;
+      if (response.data.result === true) {
         window.alert("환영합니다! 로그인 해주세요 :)");
         history.replace("/login");
-      } else if (response.result === false) {
+      } else if (response.data.result === false) {
         window.alert(response.errormessage);
         return;
       }
@@ -68,48 +70,54 @@ const signUpDB = (id, nickName, pw, pwCf, position) => {
 const logInDB = (id, pw) => {
   return async function (dispatch, getState, { history }) {
     try {
-      // const response = await axiosInstance.post("/api/login", {
-      //   username: id,
-      //   password: pw,
-      // });
-      const response = RESP.LOGINPOST;
-      if (!response.result) {
-        const accessToken = response.token;
+      const response = await axiosInstance.post("/api/login", {
+        username: id,
+        password: pw,
+      });
+      // const response = RESP.LOGINPOST;
+      if (response.status === 200) {
+        const accessToken = response.headers.authorization;
+        let decoded = jwt_decode(accessToken);
+        console.log(decoded);
         sessionStorage.setItem("token", accessToken);
         dispatch(
           getUser({
-            // username: JSON.parse(atob(accessToken.split(".")[0])),
-            // nickName: JSON.parse(atob(accessToken.split(".")[0])),
-            // position: JSON.parse(atob(accessToken.split(".")[0])),
-            username: "bkw9604",
-            nickName: "카이저쏘제",
-            position: "프론트엔드",
+            username: decoded.USER_NAME,
+            nickName: decoded.NICK_NAME,
+            position: decoded.POSITION,
+            // username: "bkw9604",
+            // nickName: "카이저쏘제",
+            // position: "프론트엔드",
           })
         );
         window.alert("환영합니다!");
         history.replace("/");
+        return;
       } else if (response.result === false) {
         window.alert(response.errormessage);
         return;
       }
     } catch (err) {
-      console.error(err);
+      window.alert("로그인 정보가 잘못되었습니다.");
+      return;
     }
   };
 };
 const userCheckDB = () => {
   return async function (dispatch, getState, { history }) {
     try {
-      //   const response = await axiosInstance.get("/api/islogin")
-      const response = RESP.ISLOGINGET;
-      if (response.nickName) {
+      const response = await axiosInstance.post("/api/islogin");
+      // const response = RESP.ISLOGINGET;
+      if (response.data.nickName) {
         dispatch(
           getUser({
-            username: response.username,
-            nickName: response.nickName,
-            position: response.position,
+            username: response.data.username,
+            nickName: response.data.nickName,
+            position: response.data.position,
           })
         );
+      } else {
+        return;
       }
     } catch (err) {
       console.error(err);

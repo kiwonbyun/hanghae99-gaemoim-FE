@@ -69,7 +69,7 @@ export const RESP = {
   COMMENTSIDGET: {
     postId: 1,
     username: "1",
-    nickName: "test1",
+    nickName: "항해100",
     commentId: 1,
     comment_content: "저요저요! 댓글내용1",
   },
@@ -100,7 +100,7 @@ export const RESP = {
     position: "프론트엔드",
   },
   FRONTPOSTIDPOST: {
-    bool: true,
+    bool: false,
     frontCnt: 1,
   },
   BACKPOSTIDPOST: {

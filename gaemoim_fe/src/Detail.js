@@ -14,6 +14,7 @@ const Detail = () => {
   const params = useParams();
   const postId = params.postid;
   const post = useSelector((state) => state.post.detailPost);
+  const postGlobal = useSelector((state) => state.post);
   const login_user = useSelector((state) => state.user.user);
 
   React.useEffect(() => {
@@ -24,10 +25,12 @@ const Detail = () => {
     dispatch(actionCreators2.deletePostDB(postId));
   };
   const FEjoinBtnClick = () => {
+    console.log(postGlobal.joinBtnClicked);
     dispatch(actionCreators2.frontJoinDB(login_user?.username, post?.postId));
   };
-  const BEjoinBtnClick = () => {};
-  dispatch(actionCreators2.backJoinDB(login_user?.username, post?.postId));
+  const BEjoinBtnClick = () => {
+    dispatch(actionCreators2.backJoinDB(login_user?.username, post?.postId));
+  };
 
   if (!post) {
     return <div></div>;
@@ -67,11 +70,15 @@ const Detail = () => {
       </Titlediv>
       <Contentdiv>
         <p>{post.post_content}</p>
-        {login_user.position === "프론트엔드" ? (
-          <button onClick={FEjoinBtnClick}>FE참여하기</button>
-        ) : (
-          <button onClick={BEjoinBtnClick}>BE참여하기</button>
-        )}
+        {login_user ? (
+          <>
+            {login_user.position === "프론트엔드" ? (
+              <button onClick={FEjoinBtnClick}>FE참여하기</button>
+            ) : (
+              <button onClick={BEjoinBtnClick}>BE참여하기</button>
+            )}
+          </>
+        ) : null}
       </Contentdiv>
 
       <CommentInput postId={postId} />
