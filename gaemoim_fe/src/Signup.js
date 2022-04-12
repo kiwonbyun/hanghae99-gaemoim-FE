@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Button from "./elements/Button";
 import user, { actionCreators } from "./redux/modules/user";
@@ -11,6 +11,19 @@ const Signup = () => {
   const pwref = useRef();
   const pwconfirmref = useRef();
   const positionref = useRef();
+  const idCheckResult = useSelector((state) => state.user.id_Check);
+
+  const idCheck = () => {
+    const id = idref.current.value;
+    if (id === "") {
+      return;
+    }
+    if (id.length > 12 || id.length < 4) {
+      window.alert("아이디는 4~12자로 입력해주세요.");
+      return;
+    }
+    dispatch(actionCreators.idCheckDB(id));
+  };
 
   const signupClick = () => {
     const id = idref.current.value;
@@ -18,13 +31,12 @@ const Signup = () => {
     const pw = pwref.current.value;
     const pwCf = pwconfirmref.current.value;
     const position = positionref.current.value;
+
     if (id === "" || nickname === "" || pw === "" || pwCf === "") {
       window.alert("아이디,닉네임,비밀번호는 필수입니다.");
       return;
     }
-    if (id.length > 12 || id.length < 4) {
-      window.alert("아이디는 4~12자로 입력해주세요.");
-    }
+
     if (pw < 6) {
       window.alert("비밀번호는 6자리 이상으로 입력해주세요");
       return;
@@ -35,6 +47,10 @@ const Signup = () => {
     }
     if (position.length < 2) {
       window.alert("지원하는 포지션을 선택해주세요.");
+      return;
+    }
+    if (idCheckResult !== true) {
+      window.alert("아이디 중복확인을 다시 해주세요");
       return;
     }
 
@@ -50,6 +66,10 @@ const Signup = () => {
           placeholder="영문,숫자 조합 4~12자리"
           ref={idref}
         ></input>
+        <button onClick={idCheck}>중복확인</button>
+        {idCheckResult ? (
+          <small style={{ color: "blue" }}>중복된 아이디가 없습니다</small>
+        ) : null}
         <label htmlFor="nickname">닉네임</label>
         <input id="nickname" ref={nicknameref}></input>
         <label htmlFor="PW">비밀번호</label>
@@ -57,9 +77,10 @@ const Signup = () => {
           id="PW"
           placeholder="영문,숫자 조합 6자리 이상"
           ref={pwref}
+          type="password"
         ></input>
         <label htmlFor="PWConfirm">비밀번호 확인</label>
-        <input id="PWConfirm" ref={pwconfirmref}></input>
+        <input id="PWConfirm" type="password" ref={pwconfirmref}></input>
       </div>
       <div>
         <select ref={positionref}>
@@ -81,6 +102,7 @@ const Container = styled.div`
   align-items: center;
   div {
     margin-top: 50px;
+    position: relative;
     &:first-child {
       display: flex;
       flex-direction: column;
@@ -99,6 +121,19 @@ const Container = styled.div`
       }
       label {
         margin-top: 25px;
+      }
+      button {
+        background-color: #ff9b26;
+        border-radius: 20px;
+        border: none;
+        color: white;
+        height: 24px;
+        width: 70px;
+        font-size: 14px;
+        font-weight: 600;
+        position: absolute;
+        right: 5px;
+        top: 52px;
       }
     }
     &:nth-child(2) {

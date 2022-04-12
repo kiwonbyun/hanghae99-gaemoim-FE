@@ -5,9 +5,14 @@ import { ConnectedRouter } from "connected-react-router";
 import Signup from "./Signup";
 import Login from "./Login";
 import Main from "./Main";
+
 import { history } from "./redux/configStore";
 import { useDispatch } from "react-redux";
 import { actionCreators } from "./redux/modules/user";
+import { actionCreators2 } from "./redux/modules/post";
+import Write from "./Write";
+import Detail from "./Detail";
+import Postedit from "./Postedit";
 
 function App() {
   const dispatch = useDispatch();
@@ -30,8 +35,17 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/">
+          <Route path="/" exact>
             <Main />
+          </Route>
+          <Route path="/write" exact>
+            <Write />
+          </Route>
+          <Route path="/detail/:postid">
+            <Detail />
+          </Route>
+          <Route path="/write/edit/:postid">
+            <Postedit />
           </Route>
         </Switch>
       </ConnectedRouter>

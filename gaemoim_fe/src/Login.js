@@ -30,7 +30,7 @@ const Login = () => {
   return (
     <Container>
       <div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png"></img>
+        <img src="https://blog.kakaocdn.net/dn/uuLiH/btry9n1iMIt/1HgIlc2lE9chKhBBxUVBR0/img.png"></img>
       </div>
       <div>
         <label htmlFor="ID">아이디</label>
@@ -59,7 +59,7 @@ const Container = styled.div`
   div {
     &:first-child {
       img {
-        width: 350px;
+        width: 250px;
       }
     }
     &:nth-child(2) {
