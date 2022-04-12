@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "./elements/Button";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { actionCreators } from "./redux/modules/user";
+import { actionCreators } from "../redux/modules/user";
+import { Button } from "../elements";
 
 const Header = () => {
   const dispatch = useDispatch();

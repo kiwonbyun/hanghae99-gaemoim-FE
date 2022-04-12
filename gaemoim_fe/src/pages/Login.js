@@ -1,8 +1,10 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import Button from "./elements/Button";
 import { useDispatch } from "react-redux";
-import { actionCreators } from "./redux/modules/user";
+import { actionCreators } from "../redux/modules/user";
+
+import { Button } from "../elements";
+
 
 const Login = () => {
   const dispatch = useDispatch();

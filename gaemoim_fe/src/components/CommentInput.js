@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import Button from "./elements/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreators3 } from "./redux/modules/comments";
+import { actionCreators3 } from "../redux/modules/comments";
+
+
 
 const CommentInput = (props) => {
   const dispatch = useDispatch();

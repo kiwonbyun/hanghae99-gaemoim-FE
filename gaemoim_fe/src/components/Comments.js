@@ -2,10 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreators3 } from "./redux/modules/comments";
+import { actionCreators3 } from "../redux/modules/comments";
+
+import axiosInstance from "../shared/request";
+import { RESP } from "../shared/response";
+
 import CommentEdit from "./CommentEdit";
-import axiosInstance from "./shared/request";
-import { RESP } from "./response";
+
+
+
 
 const Comments = (props) => {
   const dispatch = useDispatch();

@@ -1,9 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import Button from "./elements/Button";
 import { useHistory } from "react-router-dom";
-import post, { actionCreators2 } from "./redux/modules/post";
+import { actionCreators2 } from "../redux/modules/post";
+
+import { Button } from "../elements";
+
 
 const Main = (props) => {
   const history = useHistory();

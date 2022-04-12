@@ -1,9 +1,13 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import Button from "./elements/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreators2 } from "./redux/modules/post";
+import { actionCreators2 } from "../redux/modules/post";
 import { useParams } from "react-router-dom";
+
+import { Button } from "../elements";
+
+
+
 const Postedit = () => {
   const dispatch = useDispatch();
   const params = useParams();

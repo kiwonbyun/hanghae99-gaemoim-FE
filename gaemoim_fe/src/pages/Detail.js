@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import CommentInput from "./CommentInput";
-import Comments from "./Comments";
-import Button from "./elements/Button";
+
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { actionCreators2 } from "./redux/modules/post";
+import { actionCreators2 } from "../redux/modules/post";
 import { useHistory } from "react-router-dom";
+
+import { Button, Permit } from "../elements";
+import { CommentInput, Comments } from "../components";
 
 const Detail = () => {
   const history = useHistory();
@@ -26,7 +27,7 @@ const Detail = () => {
   const FEjoinBtnClick = () => {
     dispatch(actionCreators2.frontJoinDB(login_user?.username, post?.postId));
   };
-  const BEjoinBtnClick = () => {};
+  const BEjoinBtnClick = () => { };
   dispatch(actionCreators2.backJoinDB(login_user?.username, post?.postId));
 
   if (!post) {
@@ -67,11 +68,13 @@ const Detail = () => {
       </Titlediv>
       <Contentdiv>
         <p>{post.post_content}</p>
-        {login_user.position === "프론트엔드" ? (
-          <button onClick={FEjoinBtnClick}>FE참여하기</button>
-        ) : (
-          <button onClick={BEjoinBtnClick}>BE참여하기</button>
-        )}
+        <Permit>
+          {login_user?.position === "프론트엔드" ? (
+            <button onClick={FEjoinBtnClick}>FE참여하기</button>
+          ) : (
+            <button onClick={BEjoinBtnClick}>BE참여하기</button>
+          )}
+        </Permit>
       </Contentdiv>
 
       <CommentInput postId={postId} />

@@ -1,8 +1,12 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import Button from "./elements/Button";
 import { useDispatch } from "react-redux";
-import { actionCreators2 } from "./redux/modules/post";
+import { actionCreators2 } from "../redux/modules/post";
+
+import { Button } from "../elements";
+
+
+
 const Write = () => {
   const dispatch = useDispatch();
   const titleref = useRef();

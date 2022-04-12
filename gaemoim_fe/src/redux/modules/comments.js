@@ -1,7 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axiosInstance from "../../shared/request";
-import { RESP } from "../../response";
+import { RESP } from "../../shared/response";
 
 //action
 const GETCOMMENTS = "getComments";
