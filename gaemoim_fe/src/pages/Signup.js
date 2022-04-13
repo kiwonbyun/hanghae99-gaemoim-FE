@@ -1,9 +1,11 @@
 import React, { useRef } from "react";
 import { useDispatch } from "react-redux";
-import user, { actionCreators as userAction } from "./redux/modules/user";
+import { actionCreators as userAction } from "../redux/modules/user";
 
 import styled from "styled-components";
-import Button from "./elements/Button";
+import { Button } from "../elements";
+
+
 
 const Signup = () => {
   const dispatch = useDispatch();

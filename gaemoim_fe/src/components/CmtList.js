@@ -16,7 +16,7 @@ const CmtList = () => {
   const comment = useSelector((state) => state.comment.list);
 
   console.log("CmtList : comment ", comment)
-  console.log("CmtList : params", params.postid);
+  // console.log("CmtList : params", params.postid);
 
   React.useEffect(() => {
     dispatch(commentActions.getCommentDB(params.postid));

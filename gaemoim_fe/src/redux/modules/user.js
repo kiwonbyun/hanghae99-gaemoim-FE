@@ -1,9 +1,11 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
+
 import axiosInstance from "../../shared/request";
 import { setCookie, getCookie, deleteCookie } from "../../shared/Cookie";
-import { RESP } from "../../response";
-import Login from "../../Login";
+import { RESP } from "../../shared/response";
+
+import jwt_decode from "jwt-decode";
 
 
 // 액션 
@@ -36,116 +38,67 @@ const user_initial = {
 
 const signUpDB = (user_info) => {
   return async function (dispatch, getState, { history }) {
-// const response = 
-
-    // axiosInstance
-    //   .post("/api/register", {
-    //     username: user_info.username,
-    //     nickName: user_info.nickName,
-    //     password: user_info.password,
-    //     passwordCheck: user_info.passwordCheck,
-    //     position: user_info.position,
-    //   })
-    //   .then((res) => {
-    //     // 응답 데이터 받아서 할 작업 
-    //     // result : true / false
-    //     console.log(res);
-    //     dispatch(setUser(res));
-    //   }).catch((error) => {
-    //     const errorMessage = error.message;
-    //     const errorCode = error.code;
-    //     console.log(errorMessage, errorCode);
-    //     window.alert(errorMessage);
-    //   })
-
-      const response = RESP.REGISTERPOST;
-      console.log("signUpDB : user_info", user_info);
-      console.log("signUpDB : response.result", response.result);
-      
-
-    if (response.result === "success") {
-      window.alert("가입이 완료되었습니다!")
-      history.push("/login");
-    }
+    // console.log(signUpDB : user_info);
+  axiosInstance
+      .post("/api/register", {
+        username: user_info.username,
+        nickName: user_info.nickName,
+        password: user_info.password,
+        passwordCheck: user_info.passwordCheck,
+        position: user_info.position,
+      })
+      .then((res) => {
+        // console.log("signUpDB : response",res);
+        if(res.data.result === true) {
+          dispatch(setUser(res));
+          history.push("/");
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
   }
 }
 
 
 const logInDB = (username, password) => {
   return function (dispatch, getState, { history }) {
-// const response = 
 
-    // axiosInstance
-    // .post("/api/login", {
-    //   username: username,
-    //   password: password,
-    // })
-    // .then((res) => {
-    //   // 응답 데이터 받아서 할 작업 
-    //   const token = res.headers.authorization;
-    //   TokenToCookie(accessToken);
-    //   sessionStorage.setItem("token", accessToken);
-    //   const user_data = {
-    //     username: "토큰 디코딩",
-    //     nickName: "토큰 디코딩",
-    //     position: "토큰 디코딩",
-    //   }
-    //   console.log(res);
-    //   console.log(user_data);
-    //   if(token){
-    //     dispatch(logIn(user_data));
-    //     history.push("/");
-    //   }
-    // }).catch((error) => {
-    //   const errorMessage = error.message;
-    //   const errorCode = error.code;
-    //   console.log(errorMessage, errorCode);
-    //   window.alert(errorMessage);
-    // })
-    const response = RESP.REGISTERPOST;
-    const user = RESP.ISLOGINGET;
-    
-    if(response.result === "success" ) {
-      dispatch(logIn(user));
-      history.replace("/");
-    }
-    
+    axiosInstance
+    .post("/api/login", {
+      username: username,
+      password: password,
+    })
+    .then((res) => {
+      // 응답 데이터 받아서 할 작업 
+      const token = res.headers.authorization;
+      localStorage.setItem("token", token);
+      const user_data = jwt_decode(token);
+      // console.log("loginDB : response", res);
+      // console.log("loginDB : token", token)
+      // console.log("loginDB : user_data", user_data)
+      if(token){
+        dispatch(logIn(user_data));
+        history.push("/");
+      }
+    }).catch((error) => {
+        console.log(error.response)
+    })
+
   }
 }
 
 
 const loginCheckDB = () => {
   return function (dispatch, getState, {history}) {
-// const response = 
-
-    // axiosInstance
-    // .get("/api/islogin", {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   }
-    // })
-    // .then((res) => {
-    //   // 응답 데이터 받아서 할 작업 
-    //   const token = res.headers.authorization;
-    //   TokenToCookie(accessToken);
-    //   sessionStorage.setItem("token", accessToken);
-    //   const user_data = {
-    //     ...user_initial,
-    //     username: "토큰 디코딩",
-    //     nickName: "토큰 디코딩",
-    //     position: "토큰 디코딩",
-    //   }
-    //   console.log(res);
-    //   console.log(user_data)
-    //   dispatch(getUser(user_data));
-    // }).catch((error) => {
-    //   const errorMessage = error.message;
-    //   const errorCode = error.code;
-    //   console.log(errorMessage, errorCode);
-    //   window.alert(errorMessage);
-    // })
-
-
+  axiosInstance
+    .get("/api/islogin")
+    .then((res) => {
+      // 응답 데이터 받아서 할 작업 
+      console.log("loginCheckDB : response", res);
+      dispatch(getUser(res));
+    }).catch((error) => {
+      console.log(error);
+    })
   }
 }
 
@@ -171,9 +124,10 @@ export default handleActions(
     [GET_USER]: (state, action) => produce(state, (draft) => {
       setCookie("is_login", "success");
       draft.user = action.payload.user;
+      draft.is_login = true;
     }),
     [LOG_IN]: (state, action) => produce(state, (draft) => {
-      setCookie("is_login", "success", 3);
+      setCookie("is_login", "success");
       draft.user = { ...action.payload };
       draft.is_login = true;
     }),

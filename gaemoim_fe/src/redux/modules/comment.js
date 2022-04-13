@@ -1,7 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axiosInstance from "../../shared/request";
-import { RESP } from "../../response";
+import { RESP } from "../../shared/response";
 
 
 
@@ -33,59 +33,30 @@ const initialState = {
 
 const getCommentDB = (params) => {
   return async function (dispatch, getState, { history }) {
-  // const response = 
-  // axiosInstance
-  //     .get("/api/comment/" + params, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       }
-  //     })
-  //     .then((res) => {
-  //       
-  //       const comment_data = { ...res }
-  //       console.log(res);
-  //       console.log(comment_data)
-  //       dispatch(getComment(comment_data));
-  //     }).catch((error) => {
-  //       const errorMessage = error.message;
-  //       const errorCode = error.code;
-  //       console.log(errorMessage, errorCode);
-  //       window.alert(errorMessage);
-  //     })
-
-    const response = RESP.COMMENTSPOSTIDGET;
-
-    console.log("getCommentDB : response", response);
-
-    dispatch(getComment(response));
+    axiosInstance
+      .get("/api/comment/"+params)
+      .then((res) => {
+        console.log("getCommentDB : response", res);
+        // dispatch(getComment(res));
+      }).catch((error) => {
+        // window.alert(error);
+      })
   }
 }
 
-const addCommentDB = (comment) => {
+const addCommentDB = (comment, postId) => {
   return async function (dispatch, getState, { history }) {
     console.log("addCommentDB : comment", comment);
-// const response = 
-// axiosInstance
-//       .post("/api/comment", {...comment}, {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         }
-//       })
-//       .then((res) => {
+    axiosInstance
+      .post(`/api/comment/${postId}`, { ...comment })
+      .then((res) => {
 
-//         console.log(res); //result:true/false
-//         history.push("/");
+        console.log("addCommentDB : response", res); 
+        dispatch(addComment(res.data));
 
-//       }).catch((error)=> {
-//         console.log(error);
-//       })
-  const response = RESP.COMMENTSPOSTIDPOST;
-
-    dispatch(addComment(comment));
-
-    if (response.result === "success") {
-      window.alert("성공적으로 작성되었습니다!");
-    }
+      }).catch((error) => {
+        console.log(error);
+      })
   }
 }
 

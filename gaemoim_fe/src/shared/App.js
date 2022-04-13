@@ -1,16 +1,13 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
-import { history } from "./redux/configStore";
+import { history } from "../redux/configStore";
 import { useDispatch } from "react-redux";
 // import { actionCreators } from "./redux/modules/user";
 
-import Header from "./Header";
-import Signup from "./Signup";
-import Login from "./Login";
-import Main from "./Main";
-import PostDetail from "./pages/PostDetail";
-import Write from "./pages/Write"
+import Header from "../components/Header";
+import { Login, Main, PostDetail, Signup, Write } from "../pages";
+
 
 
 

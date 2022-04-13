@@ -3,9 +3,10 @@ import styled from "styled-components";
 
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { actionCreators as postActions } from "./redux/modules/post";
+import { actionCreators as postActions } from "../redux/modules/post";
+import { Button } from "../elements";
 
-import Button from "./elements/Button";
+
 
 const Main = (props) => {
 

@@ -1,18 +1,19 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "./elements/Button";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { Grid, Text } from "./elements";
-import { actionCreators as userAction } from "./redux/modules/user";
+import { actionCreators as userAction } from "../redux/modules/user";
+import { Button, Grid, Text } from "../elements";
+
+
 
 const Header = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const user = useSelector((state) => state.user.user)
+  const user = useSelector((state) => state.user.user?.user)
   const is_login = useSelector((state) => state.user.is_login);
-  console.log("Header : user", user, is_login);
+  // console.log("Header : user", user, is_login);
   
   const logout = () => {
     sessionStorage.removeItem("token");
@@ -24,11 +25,10 @@ const Header = (props) => {
     return (
       <Container>
         <div>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png"></img>
         </div>
         <div>
           <Grid is_flex width="fit-content" align="right">
-            <Text bold >🧡{user.user.nickName}</Text>
+            <Text bold >🧡{user.NICK_NAME}</Text>
             <Text>님 안녕하세요!</Text>
             <Button size="S" onClick={() => { logout(); history.push("/"); }}>로그아웃</Button>
             {/* <Button size="S" color="light" onClick={() => { history.push("/signup"); }}>회원가입</Button> */}
@@ -41,7 +41,6 @@ const Header = (props) => {
   return (
     <Container>
       <div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png"></img>
       </div>
       <div>
         <Button size="S" onClick={() => { history.push("/login"); }}>로그인</Button>

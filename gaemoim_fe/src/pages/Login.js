@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "./elements/Button";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { actionCreators as userAction } from "./redux/modules/user";
+import { actionCreators as userAction } from "../redux/modules/user";
+import { Button } from "../elements";
+
 
 const Login = () => {
   const dispatch = useDispatch();

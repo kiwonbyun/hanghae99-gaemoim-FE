@@ -18,10 +18,10 @@ const PostContent = (props) => {
   const position = useSelector((state) => state?.user?.user?.user.position);
 
 
-  console.log("PostContent : post", post);
-  console.log("PostContent : user", user);
-  console.log("PostContent : position", position);
-  console.log("PostContent : params", params.postid);
+  // console.log("PostContent : post", post);
+  // console.log("PostContent : user", user);
+  // console.log("PostContent : position", position);
+  // console.log("PostContent : params", params.postid);
 
   React.useEffect(() => {
     dispatch(postActions.getDetailPostDB(params.postid));
@@ -43,12 +43,12 @@ const PostContent = (props) => {
           </Grid>
           <Grid width="100px">
             <Grid padding="2px" align="right">
-              <Permit>
+              {/* <Permit> */}
                 <Button size="XS" onClick={() => {
                   history.push(`/write/${params.postid}`)
                 }}>수정</Button>
                 <Button size="XS" color="light" onClick={deletePost}>삭제</Button>
-              </Permit>
+              {/* </Permit> */}
             </Grid>
             <Grid padding="2px" align="right">
               <Text bold size="S">{post?.nickName}</Text>
@@ -62,11 +62,11 @@ const PostContent = (props) => {
           <Grid margin=" 0">
             <Text>{post?.post_content}</Text>
           </Grid>
-          <Permit>
+          {/* <Permit> */}
             <Grid margin="40px 0" align="center">
-              {position === "프론트엔드" ? <Button type="circle" size="S">FE참여</Button> : <Button type="circle" size="S">BE참여</Button>}
+              {/* {position === "프론트엔드" ? <Button type="circle" size="S">FE참여</Button> : <Button type="circle" size="S">BE참여</Button>} */}
             </Grid>
-          </Permit>
+          {/* </Permit> */}
 
         </Grid>
 

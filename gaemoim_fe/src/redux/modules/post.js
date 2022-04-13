@@ -1,7 +1,7 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axiosInstance from "../../shared/request";
-import { RESP } from "../../response";
+import { RESP } from "../../shared/response";
 
 
 // 액션 
@@ -36,65 +36,29 @@ const initialPost = {
 // 포스트 목록 가져오기
 const getPostDB = () => {
   return async function (dispatch, getState, { history }) {
-    //const response = 
-    // axiosInstance
-    //   .get("/api/post", {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     }
-    //   })
-    //   .then((res) => {
-    //     // 데이터 받아서 할 작업 
-    //     const post_list = { ...res };
-    //     console.log(res);
-    //     console.log(post_list);
-    //     dispatch(getPost(post_list));
-    //   }).catch((error) => {
-    //     const errorMessage = error.message;
-    //     const errorCode = error.code;
-    //     console.log(errorMessage, errorCode);
-    //     window.alert(errorMessage);
-    //   })
-
-    const response = RESP.POSTPOSTIDGET;
-    console.log("getPostDB : response", response);
-
-    dispatch(getPost(response));
+    axiosInstance
+      .get("/api/post")
+      .then((res) => {
+        // console.log("getPostDB : response ", res.data.content);
+        dispatch(getPost(res.data.content));
+      }).catch((error) => {
+        console.log(error)
+      })
   }
 }
-
 
 
 // 상세페이지 포스트 가져오기
 const getDetailPostDB = (params) => {
   return async function (dispatch, getState, { history }) {
-    //const response = 
-    // axiosInstance
-    //   .get("/api/post/" + params, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     }
-    //   })
-    //   .then((res) => {
-    //     // 데이터 받아서 할 작업 
-    //     const post_data = { ...res }
-
-    //     console.log(res);
-    //     console.log(post_data);
-    //     dispatch(getDetailPost(post_data));
-    //   }).catch((error) => {
-    //     const errorMessage = error.message;
-    //     const errorCode = error.code;
-    //     console.log(errorMessage, errorCode);
-    //     window.alert(errorMessage);
-    //   })
-
-
-    const response = RESP.POSTPOSTIDGET;
-    console.log("상세페이지 포스트", response[0])
-
-    dispatch(getDetailPost(response[0]));
-
+    axiosInstance
+      .get("/api/post/" + params)
+      .then((res) => {
+        // console.log("getDetailPostDB : response ", res.data);
+        dispatch(getDetailPost(res.data));
+      }).catch((error) => {
+        console.log(error);
+      })
   }
 }
 
@@ -109,56 +73,40 @@ const addPostDB = (post_data) => {
       backNum: Number(post_data.backNum),
       completed: false,
     }
+    // console.log("addPostDB : post_data",post_data)
+    // console.log("addPostDB : _post", _post)
 
-    console.log("addPostDB : _post", _post)
+    axiosInstance
+      .post("/api/post", _post)
+      .then((res) => {
+        console.log("addPostDB : response", res)
+        if (res.data.result === true) {
+          window.alert("성공적으로 작성되었습니다!");
+          history.push("/");
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
 
-
-    //const response = 
-    // axiosInstance
-    //   .post("/api/post", _post, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     }
-    //   })
-    //   .then((res) => {
-    //     //res = result:true / false
-    //     console.log(res)
-    //     history.push("/");
-    //   }).catch((error) => {
-    //     console.log(error);
-    //   })
-
-
-    const response = RESP.POSTPOST;
-    console.log("addPostDB : response", response);
-
-    dispatch(addPost(_post));
-
-    if (response.result === "success") {
-      window.alert("성공적으로 작성되었습니다!");
-      history.push("/");
-    }
   }
 }
 
 const deletePostDB = (postid) => {
   return function (dispatch, getState, { history }) {
-    console.log("deletePostDB : postid ", postid)
-    console.log("삭제하기")
-    // const response = 
-    // axiosInstance
-    // .delete(`/api/post/${postid}`, {
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //   }
-    // })
-    // .then((res) => {
-    //   //result : true / false
-    //   console.log(res);
-    //   dispatch(deletePost(params));
-    // }).catch((error) => {
-    //   console.log("deletePostDB : error", error);
-    // })
+    
+    // console.log("deletePostDB : postid ", postid)
+
+    axiosInstance
+    .delete(`/api/post/${postid}`)
+    .then((res) => {
+      // console.log("deletePostDB : res", res);
+      if(res.data.result === true) {
+        dispatch(deletePost(postid));
+        history.replace("/");
+      }
+    }).catch((error) => {
+      console.log("deletePostDB : error", error);
+    })
   }
 }
 
@@ -166,19 +114,17 @@ const deletePostDB = (postid) => {
 const editPostDB = (post_data) => {
   return function (dispatch, getState, { history }) {
     console.log("editPostDB : post_data", post_data );
-
-    // const response = 
-    // axiosInstance
-    //   .put(`/api/post/${post_data.userId}`, post_data, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //     }
-    //   }).then((res) => {
-    //     console.log(res);
-    //     dispatch(editPost(res));
-    //   }).catch((error) => {
-    //     console.log(error);
-    //   })
+    axiosInstance
+      .put(`/api/post/${post_data.postId}`, post_data)
+      .then((res) => {
+        // console.log("editPostDB : response", res);
+        if(res.data.result === true) {
+        dispatch(editPost(res));
+        history.push(`/post/${post_data.postId}`)
+        }
+      }).catch((error) => {
+        console.log(error);
+      })
 
   }
 }
@@ -190,24 +136,24 @@ const editPostDB = (post_data) => {
 export default handleActions(
   {
     [ADD_POST]: (state, action) => produce(state, (draft) => {
-      console.log("ADD_POST", action.payload.post);
+      // console.log("ADD_POST", action.payload.post);
       draft.list.unshift(action.payload.post);
     }),
     [GET_POST]: (state, action) => produce(state, (draft) => {
-      console.log("GET_POST", action.payload.post_list);
+      // console.log("GET_POST", action.payload.post_list);
       draft.list = action.payload.post_list;
     }),
     [GET_DTPOST]: (state, action) => produce(state, (draft) => {
-      console.log("GET_DTPOST : detail_post ", action.payload.post);
+      // console.log("GET_DTPOST : detail_post ", action.payload.post);
       draft.dtPost = action.payload.post;
     }),
     [EDIT_POST]: (state, action) => produce(state, (draft) => {
-      console.log("EDIT_POST", action.payload.post);
+      // console.log("EDIT_POST", action.payload.post);
       let idx = draft.list.findIndex((post) => post.postId === action.payload.postId);
       draft.list[idx] = {...draft.list[idx], ...action.payload.post}
     }),
     [DELETE_POST]: (state, action) => produce(state, (draft) => {
-      console.log("DELETE : action.payload", action.payload);
+      // console.log("DELETE : action.payload", action.payload);
       draft.list = draft.list.filter((post) => post.postId !== action.payload.postId);
     }),
   }, initialState

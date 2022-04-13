@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 
 import { Button, Grid, Input, Text } from "../elements";
@@ -15,24 +15,29 @@ const PostWrite = (props) => {
   const postid = params.postId
   const is_edit = postid ? true : false;
 
-
   const title = React.useRef(null);
   const post_content = React.useRef(null);
   const frontNum = React.useRef(null);
   const backNum = React.useRef(null);
 
+  console.log("PostWrite : params", params);
+
+
+  const user = useSelector((state) => state.user.user.user)
+  const post = useSelector((state) => state.post.dtPost)
+
+  // console.log("PostWrite : post",post)
 
   const addPost = () => {
     const post_data = {
       title: title.current.value,
-      username: null,
-      nickName: null,
+      username: user.USER_NAME,
+      nickName: user.NICK_NAME,
       post_content: post_content.current.value,
       frontNum: frontNum.current.value,
       backNum: backNum.current.value,
       completed: false,
     }
-    // console.log(post_content.current.value)
 
     if (post_data.title === "" || post_data.post_content === "") {
       return window.alert("항목을 모두 입력해주세요!")
@@ -46,11 +51,11 @@ const PostWrite = (props) => {
   const editPost = () => {
 
     const post_data = {
-      postId: params.userid,
+      postId: params.postId,
       title: title.current.value,
+      post_content: post_content.current.value,
       frontNum: frontNum.current.value,
       backNum: backNum.current.value,
-      post_content: post_content.current.value,
       completed: false,
     }
 
@@ -69,10 +74,7 @@ const PostWrite = (props) => {
   return (
     <React.Fragment>
       <Grid>
-        <Input
-          type="line"
-          label="제목"
-          placeholder="제목을 입력해주세요." _ref={title} />
+        <Input type="line" label="제목" placeholder="제목을 입력해주세요." _ref={title} />
         <Grid is_flex margin="16px 0">
           <Text bold>프론트엔드</Text>
           <Select _ref={frontNum} />

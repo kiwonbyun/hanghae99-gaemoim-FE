@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Grid, Input } from "../elements";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as commentActions } from "../redux/modules/comment";
 import { useParams } from "react-router-dom";
 
@@ -9,20 +9,25 @@ const CmtWrite = () => {
 
   const dispatch = useDispatch();
   const params = useParams();
+  const postId = params.postid
 
-  console.log()
   const comment = React.useRef(null);
+
+  const user = useSelector((state) => state?.user?.user?.user)
+
+  console.log("CmtWrite : params", params);
+  console.log("CmtWrite : user", user)
 
   const addComment = () => {
     const comment_data = {
       postId: Number(params.postid),
+      username: user.USER_NAME,
+      nickName: user.NICK_NAME,
       comment_content: comment.current.value,
-      username: "",
-      nickName: "",
     }
-    console.log("CmtWrite : comment_content", comment_data.comment_content)
+    // console.log("CmtWrite : comment_content", comment_data.comment_content)
   
-    dispatch(commentActions.addCommentDB(comment_data));
+    dispatch(commentActions.addCommentDB(comment_data, postId));
   }
 
   
