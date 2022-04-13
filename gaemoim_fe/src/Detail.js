@@ -14,7 +14,6 @@ const Detail = () => {
   const params = useParams();
   const postId = params.postid;
   const post = useSelector((state) => state.post.detailPost);
-  const postGlobal = useSelector((state) => state.post);
   const login_user = useSelector((state) => state.user.user);
 
   React.useEffect(() => {
@@ -25,11 +24,10 @@ const Detail = () => {
     dispatch(actionCreators2.deletePostDB(postId));
   };
   const FEjoinBtnClick = () => {
-    console.log(postGlobal.joinBtnClicked);
-    dispatch(actionCreators2.frontJoinDB(login_user?.username, post?.postId));
+    dispatch(actionCreators2.frontJoinDB(post.postId));
   };
   const BEjoinBtnClick = () => {
-    dispatch(actionCreators2.backJoinDB(login_user?.username, post?.postId));
+    dispatch(actionCreators2.backJoinDB(post.postId));
   };
 
   if (!post) {
@@ -51,6 +49,7 @@ const Detail = () => {
           <span>
             프론트엔드 {post.frontNum}명 | 백엔드 {post.backNum}명
           </span>
+          <span>{post.createdAt}</span>
         </div>
         <div>
           {login_user?.nickName === post.nickName ? (
@@ -66,6 +65,7 @@ const Detail = () => {
             </SmallBtndiv>
           ) : null}
           <h2>{post.nickName}</h2>
+          <small>{post.position}</small>
         </div>
       </Titlediv>
       <Contentdiv>

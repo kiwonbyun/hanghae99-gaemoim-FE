@@ -12,6 +12,7 @@ const DELETEPOST = "deletePost";
 const EDITPOST = "editPost";
 const FEJOIN = "Frontjoin";
 const BEJOIN = "Backjoin";
+const PAGEGETPOST = "PagegetPost";
 
 //initial
 const initialState = {
@@ -31,6 +32,7 @@ const initialState = {
 
 //actionCreator
 const getPost = createAction(GETPOST, (post_list) => ({ post_list }));
+const getPagePost = createAction(PAGEGETPOST, (post_list) => ({ post_list }));
 const getDetailPost = createAction(GETDETAILPOST, (post) => ({ post }));
 const addPost = createAction(ADDPOST, (post) => ({ post }));
 const deletePost = createAction(DELETEPOST, () => ({}));
@@ -39,11 +41,20 @@ const frontJoin = createAction(FEJOIN, (info) => ({ info }));
 const backJoin = createAction(BEJOIN, (info) => ({ info }));
 
 //middleware
+const getPostpageDB = (page) => {
+  return async function (dispatch, getState, { history }) {
+    const response = await axiosInstance.get(`/api/post?page=${page - 1}`);
+    console.log(response);
+    if (response.status === 200) {
+      dispatch(getPagePost(response.data));
+    }
+  };
+};
+
 const getPostDB = () => {
   return async function (dispatch, getState, { history }) {
-    const response = await axiosInstance.get("/api/post");
+    const response = await axiosInstance.get(`/api/post`);
     // const response = RESP.POSTGET;
-    console.log(response);
     if (response.status === 200) {
       dispatch(getPost(response.data));
       return;
@@ -52,17 +63,26 @@ const getPostDB = () => {
 };
 const getDetailPostDB = (postId) => {
   return async function (dispatch, getState, { history }) {
-    const numPostId = parseInt(postId);
-    const response = await axiosInstance.get(`/api/post/${numPostId}`);
-    // const response = RESP.POSTPOSTIDGET;
-    if (response.status === 200) {
-      dispatch(
-        getDetailPost({ ...response.data, frontTotalJoin: 0, backTotalJoin: 0 })
-      );
+    try {
+      const numPostId = parseInt(postId);
+      const response = await axiosInstance.get(`/api/post/detail/${numPostId}`);
+      // const response = RESP.POSTPOSTIDGET;
+      console.log(response);
+      if (response.status === 200) {
+        dispatch(
+          getDetailPost({
+            ...response.data,
+            frontTotalJoin: 0,
+            backTotalJoin: 0,
+          })
+        );
+      }
+    } catch (err) {
+      console.log(err.response);
     }
   };
 };
-const addPostDB = (title, frontNum, backNum, content) => {
+const addPostDB = (title, frontNum, backNum, content, position) => {
   return async function (dispatch, getState, { history }) {
     try {
       const user_info = getState().user.user;
@@ -70,6 +90,7 @@ const addPostDB = (title, frontNum, backNum, content) => {
         title: title,
         username: user_info.username,
         nickName: user_info.nickName,
+        position,
         frontNum: frontNum,
         backNum: backNum,
         post_content: content,
@@ -92,7 +113,7 @@ const addPostDB = (title, frontNum, backNum, content) => {
         history.push("/");
       }
     } catch (error) {
-      console.error(error);
+      console.log(error.response);
     }
   };
 };
@@ -132,15 +153,12 @@ const editPostDB = (postId, title, FEnum, BEnum, content) => {
     }
   };
 };
-const frontJoinDB = (username, postId) => {
+const frontJoinDB = (postId) => {
   return async function (dispatch, getState, { history }) {
-    console.log("참여!", username, postId);
     try {
-      const response = await axiosInstance.post(`/api/front/${postId}`, {
-        username,
-        postId,
-      });
+      const response = await axiosInstance.post(`/api/front/${postId}`);
       // const response = RESP.FRONTPOSTIDPOST;
+      console.log(response);
       if (response.bool === true) {
         dispatch(frontJoin(response));
       } else if (response.bool === false) {
@@ -152,14 +170,12 @@ const frontJoinDB = (username, postId) => {
     }
   };
 };
-const backJoinDB = (username, postId) => {
+const backJoinDB = (postId) => {
   return async function (dispatch, getState, { history }) {
     try {
-      const response = await axiosInstance.post(`/api/back/${postId}`, {
-        username,
-        postId,
-      });
+      const response = await axiosInstance.post(`/api/back/${postId}`);
       // const response = RESP.BACKPOSTIDPOST;
+      console.log(response);
       if (response.bool === true) {
         dispatch(backJoin(response));
       } else if (response.bool === false) {
@@ -181,6 +197,11 @@ export default handleActions(
         draft.list = action.payload.post_list;
         draft.is_loading = true;
       }),
+    [PAGEGETPOST]: (state, action) =>
+      produce(state, (draft) => {
+        draft.pagelist = action.payload.post_list;
+        draft.is_loading = true;
+      }),
     [GETDETAILPOST]: (state, action) =>
       produce(state, (draft) => {
         draft.detailPost = action.payload.post;
@@ -188,7 +209,7 @@ export default handleActions(
       }),
     [ADDPOST]: (state, action) =>
       produce(state, (draft) => {
-        draft.list.unshift(action.payload.post);
+        // draft.list.unshift(action.payload.post);
       }),
     [FEJOIN]: (state, action) =>
       produce(state, (draft) => {
@@ -220,6 +241,7 @@ const actionCreators2 = {
   editPostDB,
   frontJoinDB,
   backJoinDB,
+  getPostpageDB,
 };
 
 export { actionCreators2 };

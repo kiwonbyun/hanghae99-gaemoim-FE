@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import Button from "./elements/Button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { actionCreators2 } from "./redux/modules/post";
 const Write = () => {
   const dispatch = useDispatch();
@@ -9,6 +9,10 @@ const Write = () => {
   const FEnumref = useRef();
   const BEnumref = useRef();
   const contentref = useRef();
+  const login_user = useSelector((state) => state.user.user);
+
+  const position = login_user?.position;
+  console.log(position);
   const writeBtnClick = () => {
     const frontNum = FEnumref.current.value;
     const title = titleref.current.value;
@@ -27,7 +31,9 @@ const Write = () => {
       return;
     }
 
-    dispatch(actionCreators2.addPostDB(title, frontNum, backNum, content));
+    dispatch(
+      actionCreators2.addPostDB(title, frontNum, backNum, content, position)
+    );
   };
   return (
     <Container>

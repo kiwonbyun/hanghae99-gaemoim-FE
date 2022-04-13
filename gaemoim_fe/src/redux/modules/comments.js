@@ -56,13 +56,14 @@ const addCommentDB = (
 ) => {
   return async function (dispatch, getState, { history }) {
     try {
-      console.log("미들웨어 들어오니", user_position);
       const response = await axiosInstance.post(`/api/comments/${postId}`, {
         postId,
         username,
         nickName,
+        position: user_position,
         comment_content,
       });
+      console.log(response);
       // const response = RESP.COMMENTSPOSTIDPOST;
       if (response.status === 200) {
         // dispatch(

@@ -31,7 +31,6 @@ const idCheckDB = (id) => {
         username: id,
       });
       // const response = RESP.IDCHECKPOST;
-      console.log(response);
       if (response.data.result === true) {
         dispatch(idCheck(response.data.result));
       } else {
@@ -75,6 +74,7 @@ const logInDB = (id, pw) => {
         password: pw,
       });
       // const response = RESP.LOGINPOST;
+      console.log(response);
       if (response.status === 200) {
         const accessToken = response.headers.authorization;
         let decoded = jwt_decode(accessToken);
@@ -98,7 +98,10 @@ const logInDB = (id, pw) => {
         return;
       }
     } catch (err) {
-      window.alert("로그인 정보가 잘못되었습니다.");
+      console.log(err.response);
+      if (err.response.status === 401) {
+        window.alert("비밀번호를 확인해주세요.");
+      }
       return;
     }
   };
@@ -120,7 +123,7 @@ const userCheckDB = () => {
         return;
       }
     } catch (err) {
-      console.error(err);
+      console.log(err.response);
     }
   };
 };

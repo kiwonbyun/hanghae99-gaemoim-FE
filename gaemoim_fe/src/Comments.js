@@ -38,7 +38,10 @@ const Comments = (props) => {
         return (
           <OnecommentBox key={v.commentId}>
             <div>
-              <h2>{v.nickName}</h2>
+              <h2>
+                {v.nickName}/{v.position}
+              </h2>
+
               <p>{v.comment_content}</p>
             </div>
             {v.username === login_user?.username ? (

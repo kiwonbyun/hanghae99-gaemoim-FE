@@ -6,16 +6,16 @@ import { useHistory, useParams } from "react-router-dom";
 import post, { actionCreators2 } from "./redux/modules/post";
 import Pagination from "react-js-pagination";
 
-const Main = (props) => {
+const Mainpage = (props) => {
   const params = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
   const is_login = useSelector((state) => state.user.is_login);
-  const post_list = useSelector((state) => state.post.list.content);
-  const pageNum = useSelector((state) => state.post.list).totalPages;
+  const post_list = useSelector((state) => state.post.pagelist?.content);
+  const pageNum = useSelector((state) => state.post.pagelist?.totalPages);
   const totalElementsNum = useSelector(
-    (state) => state.post.list
-  ).totalElements;
+    (state) => state.post?.pagelist?.totalElements
+  );
 
   const [page, setPage] = useState(1);
 
@@ -24,8 +24,9 @@ const Main = (props) => {
     history.push(`/${page}`);
   };
   React.useEffect(() => {
-    dispatch(actionCreators2.getPostDB());
-  }, []);
+    console.log(params.id);
+    dispatch(actionCreators2.getPostpageDB(params.id));
+  }, [params.id]);
 
   if (is_login) {
     return (
@@ -43,7 +44,6 @@ const Main = (props) => {
                 <span>
                   프론트엔드 {p.frontNum} | 백엔드 {p.backNum}
                 </span>
-                <span>{p.createdAt}</span>
               </div>
               <div>
                 <span>{p.nickName}</span>
@@ -158,4 +158,4 @@ const Addbutton = styled.button`
   cursor: pointer;
 `;
 
-export default Main;
+export default Mainpage;

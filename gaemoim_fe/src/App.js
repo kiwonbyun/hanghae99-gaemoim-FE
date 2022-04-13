@@ -13,6 +13,7 @@ import { actionCreators2 } from "./redux/modules/post";
 import Write from "./Write";
 import Detail from "./Detail";
 import Postedit from "./Postedit";
+import Mainpage from "./Main_page";
 
 function App() {
   const dispatch = useDispatch();
@@ -40,6 +41,9 @@ function App() {
           </Route>
           <Route path="/write" exact>
             <Write />
+          </Route>
+          <Route path="/:id" exact>
+            <Mainpage />
           </Route>
           <Route path="/detail/:postid">
             <Detail />
