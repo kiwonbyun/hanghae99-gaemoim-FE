@@ -10,7 +10,8 @@ import { useDispatch } from "react-redux";
 import { actionCreators } from "../redux/modules/user";
 import { actionCreators2 } from "../redux/modules/post";
 
-import { Detail, Login, Main, Postedit, Signup, Write } from "../pages";
+import { Detail, Login, Main, Postedit, Signup, Write, Main2 } from "../pages";
+import Mypage from "../pages/MyPage";
 
 
 
@@ -38,10 +39,16 @@ function App() {
             <Login />
           </Route>
           <Route path="/" exact>
-            <Main />
+            <Main2 />
+          </Route>
+          <Route path="/mypage" exact>
+            <Mypage />
           </Route>
           <Route path="/write" exact>
             <Write />
+          </Route>
+          <Route path="/:id" exact>
+            <Main2 />
           </Route>
           <Route path="/detail/:postid">
             <Detail />
@@ -49,6 +56,7 @@ function App() {
           <Route path="/write/edit/:postid">
             <Postedit />
           </Route>
+
         </Switch>
       </ConnectedRouter>
     </React.Fragment>

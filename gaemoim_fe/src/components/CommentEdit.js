@@ -10,10 +10,12 @@ import { useState } from "react";
 
 const CommentEdit = (props) => {
   const dispatch = useDispatch();
-  const editingComment = useSelector((state) => state.comment.editingComment);
   const contentref = useRef();
 
-  console.log(editingComment);
+  // const editingComment = useSelector((state) => state.comment.editingComment);
+  const editingComment = useSelector( (state) => state.comment?.editingComment );
+  console.log("댓글.....................",editingComment)
+
   const editBtnClick = () => {
     const content = contentref.current.value;
     dispatch(
@@ -29,9 +31,9 @@ const CommentEdit = (props) => {
   return (
     <Container>
       <div>
-        <span>{editingComment.nickName}</span>
+        <span>{editingComment?.nickName}</span>
         <input
-          defaultValue={editingComment.comment_content}
+          defaultValue={editingComment?.comment_content}
           ref={contentref}
         ></input>
       </div>

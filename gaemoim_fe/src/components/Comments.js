@@ -8,6 +8,7 @@ import axiosInstance from "../shared/request";
 import { RESP } from "../shared/response";
 
 import CommentEdit from "./CommentEdit";
+import { Badge, Grid, Text } from "../elements";
 
 
 
@@ -15,11 +16,15 @@ import CommentEdit from "./CommentEdit";
 const Comments = (props) => {
   const dispatch = useDispatch();
   const postId = props.postId;
-  const all_comment_list = useSelector((state) => state.comment.list);
-  const comment_list = all_comment_list.filter((c) => {
-    return parseInt(c.postId) === parseInt(postId);
-  });
+  const all_comment_list = useSelector((state) => state?.comment?.list);
+  console.log(all_comment_list)
+  // let comment_list = all_comment_list.filter((c) => {
+  //       return parseInt(c?.postId) === parseInt(postId);
+  //     });
+
   const login_user = useSelector((state) => state.user.user);
+
+  // console.log(login_user.position)
 
   const [editing, setEditing] = useState(false);
 
@@ -29,6 +34,7 @@ const Comments = (props) => {
   };
   const editBtnClick = (e) => {
     console.log(e.target.value);
+    dispatch(actionCreators3.getCommentsDB(postId));
     dispatch(actionCreators3.getDetailCommentDB(e.target.value));
     setEditing((curr) => !curr);
   };
@@ -36,37 +42,54 @@ const Comments = (props) => {
   React.useEffect(() => {
     dispatch(actionCreators3.getCommentsDB(postId));
   }, []);
+
+
   return (
     <div>
       {editing ? <CommentEdit setEditing={setEditing} /> : null}
-      {comment_list.map((v) => {
+
+      {all_comment_list?.map((v) => {
         return (
-          <OnecommentBox key={v.commentId}>
-            <div>
-              <h2>{v.nickName}</h2>
-              <p>{v.comment_content}</p>
-            </div>
-            {v.username === login_user?.username ? (
-              <div>
-                <button onClick={editBtnClick} value={v.commentId}>
-                  수정 ✏️
-                </button>
-                <button onClick={deleteBtnClick} value={v.commentId}>
-                  삭제 ❌
-                </button>
-              </div>
-            ) : null}
-          </OnecommentBox>
+          <Grid padding="10px 0">
+            <OnecommentBox key={v.commentId}>
+              <Grid>
+                <Grid margin="5px">
+                  <Text bold>{v.nickName}</Text>
+                  {login_user?.position === "프론트엔드" ? <Badge>FE</Badge> : <Badge>BE</Badge>}
+                  <Grid margin="0 10px">
+                    <Text>{v.comment_content}</Text>
+                  </Grid>
+                </Grid>
+              </Grid>
+
+              {v.username === login_user?.username ? (
+                <Grid width="fit-content" margin="auto">
+                  <Grid width="fit-content">
+                    <button onClick={editBtnClick} value={v.commentId}>
+                      수정 ✏️
+                    </button>
+                    <button onClick={deleteBtnClick} value={v.commentId}>
+                      삭제 ❌
+                    </button>
+                  </Grid>
+                </Grid>
+              ) : null}
+            </OnecommentBox>
+            <hr />
+          </Grid>
+
         );
       })}
+
     </div>
   );
 };
 const OnecommentBox = styled.div`
-  border-bottom: 1px solid black;
   display: flex;
+  box-sizing: border-box;
   align-items: center;
   justify-content: space-between;
+  min-height: 30px;
   div {
     &:first-child {
       display: flex;
@@ -81,6 +104,7 @@ const OnecommentBox = styled.div`
     }
     &:last-child {
       button {
+        width: 70px;
         cursor: pointer;
       }
     }
@@ -90,4 +114,5 @@ const OnecommentBox = styled.div`
     border: none;
   }
 `;
+
 export default Comments;

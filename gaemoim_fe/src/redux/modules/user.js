@@ -2,6 +2,7 @@ import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axiosInstance from "../../shared/request";
 import { RESP } from "../../shared/response";
+import jwt_decode from 'jwt-decode';
 
 //action
 const SETUSER = "Setuser";
@@ -26,14 +27,16 @@ const idCheck = createAction(IDCHECK, (result) => ({ result }));
 const idCheckDB = (id) => {
   return async function (dispatch, getState, { history }) {
     try {
-      // const response = await axiosInstance.post("/api/idCheck", {
-      //   username: id,
-      // });
-      const response = RESP.IDCHECKPOST;
-      if (response.result === true) {
-        dispatch(idCheck(response.result));
+      const response = await axiosInstance.post("/api/idCheck", {
+        username: id,
+      })
+      console.log(response)
+      console.log(response.data.result)
+      if (response.data.result === true) {
+        
+        dispatch(idCheck(response.data.result));
       } else {
-        window.alert("중복된 아이디가 있습니다. 수정해주세요");
+        window.alert(response.data.errormessage)
         return;
       }
     } catch (error) {
@@ -45,69 +48,82 @@ const idCheckDB = (id) => {
 const signUpDB = (id, nickName, pw, pwCf, position) => {
   return async function (dispatch, getState, { history }) {
     try {
-      // const response = await axiosInstance.post("/api/register", {
-      //   username: id,
-      //   nickName,
-      //   password: pw,
-      //   passwordCheck: pwCf,
-      //   position,
-      // });
-      const response = RESP.REGISTERPOST;
-      if (response.result === true) {
+      const response = await axiosInstance.post("/api/register", {
+        username: id,
+        nickName,
+        password: pw,
+        passwordCheck: pwCf,
+        position,
+      });
+
+      console.log("ㄴㅇㅁㄴㅇㄹㄴㅇㄹ", response)
+      if (response.data.result === true) {
         window.alert("환영합니다! 로그인 해주세요 :)");
         history.replace("/login");
-      } else if (response.result === false) {
-        window.alert(response.errormessage);
+      } else if (response.data.result === false) {
+        window.alert(response.data.errormessage);
         return;
       }
     } catch (error) {
-      console.error(error);
+      console.error("에러어어어어", error);
     }
   };
 };
 const logInDB = (id, pw) => {
   return async function (dispatch, getState, { history }) {
     try {
-      // const response = await axiosInstance.post("/api/login", {
-      //   username: id,
-      //   password: pw,
-      // });
-      const response = RESP.LOGINPOST;
-      if (!response.result) {
-        const accessToken = response.token;
+      const response = await axiosInstance.post("/api/login", {
+        username: id,
+        password: pw,
+      });
+
+      console.log(response)
+      if (!response.data.result) {
+        const accessToken = response.headers.authorization;
         sessionStorage.setItem("token", accessToken);
+        // const userdata = JSON.parse(atob(accessToken.split(".")[1])),
+        const _data = jwt_decode(accessToken);
+        const user_data = {
+          username : _data.USER_NAME,
+          nickName : _data.NICK_NAME,
+          position : _data.POSITION,
+        }
+
+        console.log(user_data);
+
         dispatch(
-          getUser({
-            // username: JSON.parse(atob(accessToken.split(".")[0])),
-            // nickName: JSON.parse(atob(accessToken.split(".")[0])),
-            // position: JSON.parse(atob(accessToken.split(".")[0])),
-            username: "bkw9604",
-            nickName: "카이저쏘제",
-            position: "프론트엔드",
-          })
+          getUser(user_data)
         );
+
         window.alert("환영합니다!");
         history.replace("/");
-      } else if (response.result === false) {
-        window.alert(response.errormessage);
+      } else if (response.data.result === false) {
+        window.alert(response.data.errormessage);
         return;
       }
     } catch (err) {
-      console.error(err);
+      console.log(err.response.data);
+      console.log(err);
+      // window.alert(err.response.data.exception);
+      window.alert("입력 정보를 확인해주세요!");
     }
   };
 };
+
+
+
+
 const userCheckDB = () => {
   return async function (dispatch, getState, { history }) {
     try {
-      //   const response = await axiosInstance.get("/api/islogin")
-      const response = RESP.ISLOGINGET;
-      if (response.nickName) {
+      const response = await axiosInstance.post("/api/islogin")
+      console.log("똔똔",response)
+      if (response.data.nickName) {
         dispatch(
           getUser({
-            username: response.username,
-            nickName: response.nickName,
-            position: response.position,
+            username: response.data.username,
+            nickName: response.data.nickName,
+            position: response.data.position,
           })
         );
       }
@@ -121,9 +137,10 @@ const userCheckDB = () => {
 
 export default handleActions(
   {
-    [SETUSER]: (state, action) => produce(state, (draft) => {}),
+    [SETUSER]: (state, action) => produce(state, (draft) => { }),
     [GETUSER]: (state, action) =>
       produce(state, (draft) => {
+        // console.log("똔똔똔",action.payload.user)
         draft.user = action.payload.user;
         draft.is_login = true;
       }),

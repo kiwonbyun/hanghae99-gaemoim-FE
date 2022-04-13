@@ -17,7 +17,7 @@ const Postedit = () => {
   const BEnumref = useRef();
   const contentref = useRef();
   const post = useSelector((state) => state.post.detailPost);
-  console.log(post);
+  console.log("123123132", post);
   React.useEffect(() => {
     dispatch(actionCreators2.getDetailPostDB(postId));
   }, []);

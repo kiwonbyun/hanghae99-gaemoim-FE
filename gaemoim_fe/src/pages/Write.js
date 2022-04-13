@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { actionCreators2 } from "../redux/modules/post";
 
 import { Button } from "../elements";
@@ -13,6 +13,13 @@ const Write = () => {
   const FEnumref = useRef();
   const BEnumref = useRef();
   const contentref = useRef();
+
+  const user = useSelector((state) => state.user.user);
+
+  console.log("TITLE", titleref)
+  const position = user?.position;
+  console.log(position)
+
   const writeBtnClick = () => {
     const frontNum = FEnumref.current.value;
     const title = titleref.current.value;
@@ -31,7 +38,7 @@ const Write = () => {
       return;
     }
 
-    dispatch(actionCreators2.addPostDB(title, frontNum, backNum, content));
+    dispatch(actionCreators2.addPostDB(title, frontNum, backNum, content, position));
   };
   return (
     <Container>
@@ -80,19 +87,34 @@ const Container = styled.div`
   margin: auto;
 `;
 const Titlediv = styled.div`
-  font-size: 25px;
+  font-size: 1.5em;
   input {
+    font-family: 'Pretendard-Regular';
+    font-size: 1.2em;
+
+    box-sizing: border-box;
+    padding: 0 10px;
+
     width: 100%;
-    margin-top: 5px;
-    font-size: 20px;
+    height: 40px;
+
     border: none;
-    border-bottom: 2px solid #e6d5b8;
-    outline: none;
-    transition: 0.2s;
+    border-bottom: 2px solid #E6D5B8;
+
+    placeholder: ${(props) => props.placeholder};
+
+    transition: 0.3s;
+
     &:focus {
-      border-bottom: 3px solid #ff9b26;
-    }
+      outline: none;
+      border-bottom: 2px solid #FF9B26;
+}
+
+&::placeholder {
+  font-size:0.85em;
+  color: #888;
   }
+
 `;
 const Positiondiv = styled.div`
   display: flex;
@@ -102,20 +124,22 @@ const Positiondiv = styled.div`
     &:first-child {
       margin-right: 20px;
       select {
+        margin: 0 10px;
         border: none;
         width: 120px;
         height: 28px;
         background-color: #e6d5b8;
-        border-radius: 10px;
+        border-radius: 5px;
       }
     }
     &:last-child {
       select {
+        margin: 0 10px;
         border: none;
         width: 120px;
         height: 28px;
         background-color: #e6d5b8;
-        border-radius: 10px;
+        border-radius: 5px;
       }
     }
   }
@@ -123,18 +147,23 @@ const Positiondiv = styled.div`
 const Contentdiv = styled.div`
   display: flex;
   flex-direction: column;
-  font-size: 25px;
+  font-size: 1em;
   margin-top: 20px;
+
   textarea {
-    font-size: 20px;
+    font-family: 'Pretendard-Regular';
+
+    padding: 10px;
+    font-size: 1.5em;
     height: 300px;
     border: 2px solid #e6d5b8;
     transition: 0.2s;
     &:focus {
       outline: none;
-      border: 3px solid #ff9b26;
+      border: 2px solid #ff9b26;
     }
   }
+
 `;
 const Buttondiv = styled.div`
   width: 100%;

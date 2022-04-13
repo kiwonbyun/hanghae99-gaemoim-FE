@@ -1,25 +1,34 @@
-import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useCallback } from "react";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import styled from "styled-components";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { actionCreators2 } from "../redux/modules/post";
 
-import { Button } from "../elements";
+import { Button, Permit } from "../elements";
+import Paging from "../components/Paging";
 
 
-const Main = (props) => {
+  const Main = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const is_login = useSelector((state) => state.user.is_login);
-  const post_list = useSelector((state) => state.post.list);
+  const params = useParams();
+  const is_login = useSelector((state) => state?.user?.is_login);
+  const post_list = useSelector((state) => state?.post.list);
+
+
+
   React.useEffect(() => {
     dispatch(actionCreators2.getPostDB());
-  }, []);
+  }, [dispatch]);
+
+
+
 
   if (is_login) {
     return (
-      <Container>
-        {post_list.map((p, idx) => {
+      <Permit>
+        <Container>
+        {post_list?.map((p, idx) => {
           return (
             <Postbox
               key={p.postId}
@@ -52,12 +61,14 @@ const Main = (props) => {
         >
           글쓰기
         </Addbutton>
+        <Paging />
       </Container>
+    </Permit>
     );
   }
   return (
     <Container>
-      {post_list.map((p, idx) => {
+      {post_list?.map((p, idx) => {
         return (
           <Postbox
             key={p.postId}
@@ -82,6 +93,7 @@ const Main = (props) => {
           </Postbox>
         );
       })}
+      <Paging />
     </Container>
   );
 };

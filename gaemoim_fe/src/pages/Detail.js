@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { actionCreators2 } from "../redux/modules/post";
 import { useHistory } from "react-router-dom";
 
-import { Button, Permit } from "../elements";
+import { Badge, Button, Grid, Input, Permit, Text } from "../elements";
 import { CommentInput, Comments } from "../components";
 
 const Detail = () => {
@@ -16,6 +16,9 @@ const Detail = () => {
   const postId = params.postid;
   const post = useSelector((state) => state.post.detailPost);
   const login_user = useSelector((state) => state.user.user);
+  const completed = useSelector((state) => state.post.detailPost.completed)
+
+
 
   React.useEffect(() => {
     dispatch(actionCreators2.getDetailPostDB(postId));
@@ -27,56 +30,66 @@ const Detail = () => {
   const FEjoinBtnClick = () => {
     dispatch(actionCreators2.frontJoinDB(login_user?.username, post?.postId));
   };
-  const BEjoinBtnClick = () => { };
-  dispatch(actionCreators2.backJoinDB(login_user?.username, post?.postId));
+  const BEjoinBtnClick = () => {
+    dispatch(actionCreators2.backJoinDB(login_user?.username, post?.postId));
+  };
+
 
   if (!post) {
     return <div></div>;
   }
   return (
     <Container>
-      <div>
-        <Button size="S" color={post.completed ? "light" : null}>
-          모집중
-        </Button>
-        <Button size="S" color={post.completed ? null : "light"}>
-          모집완료
-        </Button>
-      </div>
-      <Titlediv>
-        <div>
-          <h1>{post.title}</h1>
-          <span>
-            프론트엔드 {post.frontNum}명 | 백엔드 {post.backNum}명
-          </span>
-        </div>
-        <div>
-          {login_user?.nickName === post.nickName ? (
-            <SmallBtndiv>
-              <Smallbutton
-                onClick={() => {
-                  history.push(`/write/edit/${postId}`);
-                }}
-              >
-                수정
-              </Smallbutton>
-              <Smallbutton onClick={deleteBtnClick}>삭제</Smallbutton>
-            </SmallBtndiv>
-          ) : null}
-          <h2>{post.nickName}</h2>
-        </div>
-      </Titlediv>
-      <Contentdiv>
-        <p>{post.post_content}</p>
-        <Permit>
-          {login_user?.position === "프론트엔드" ? (
-            <button onClick={FEjoinBtnClick}>FE참여하기</button>
-          ) : (
-            <button onClick={BEjoinBtnClick}>BE참여하기</button>
-          )}
-        </Permit>
-      </Contentdiv>
+      <Grid is_flex>
+        {/* <Badge>모집중</Badge>
+        <Badge type="모집완료">모집완료</Badge> */}
+        {completed ? (<Badge type="모집완료">모집완료</Badge>) : (<Badge>모집중</Badge>)}        
+      </Grid>
+      <Grid is_flex>
+        <Grid>
+          <Grid margin="8px 0">
+            <Text size="L">{post.title}</Text>
+          </Grid>
+          <Grid margin="4px 0">
+            <Text>프론트엔드 {post.frontNum}명 | 백엔드 {post.backNum}명</Text>
+          </Grid>
+        </Grid>
+        
+        <Grid width="fit-content" is_flex>
 
+          <Grid width="10vw" margin="0 5px">
+            <Text bold align="right">{post.nickName}</Text>
+          </Grid>
+          <Permit>
+            <Grid is_flex>
+              <Grid width="fit-content" margin="0 5px">
+                <Button size="XS" onClick={() => { history.push(`/write/edit/${postId}`); }}>수정</Button>
+              </Grid>
+              <Grid>
+                <Button size="XS" color="light" onClick={deleteBtnClick}>삭제</Button>
+              </Grid>
+            </Grid>
+          </Permit>
+        </Grid>
+      </Grid>
+      <hr />
+      <Grid>
+        <Grid margin="20px 0">
+          <Box>
+            <Text>{post.post_content}</Text>
+          </Box>
+        </Grid>
+        <Grid width="fit-content" margin="40px auto">
+          <Permit>
+            {login_user?.position === "프론트엔드" ? (
+              <Button type="circle" onClick={FEjoinBtnClick}>FE참여하기</Button>
+            ) : (
+              <Button type="circle" onClick={BEjoinBtnClick}>BE참여하기</Button>
+            )}
+          </Permit>
+        </Grid>
+        <hr />
+      </Grid>
       <CommentInput postId={postId} />
       <Comments postId={postId} />
     </Container>
@@ -119,7 +132,6 @@ const SmallBtndiv = styled.div`
   display: flex;
   justify-content: space-around;
 `;
-
 const Contentdiv = styled.div`
   border-top: 1px solid black;
   border-bottom: 1px solid black;
@@ -143,4 +155,9 @@ const Contentdiv = styled.div`
     margin-bottom: 10px;
   }
 `;
+const Box = styled.div`
+  min-height: 100px;
+`;
+
+
 export default Detail;

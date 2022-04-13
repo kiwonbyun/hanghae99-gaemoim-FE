@@ -34,51 +34,55 @@ const getDetailComment = createAction(GETDETAILCOMMENT, (comment) => ({
   comment,
 }));
 const editComment = createAction(EDITCOMMENT, (comment) => ({ comment }));
+
+
+
+
 //middlewares
 const getCommentsDB = (postId) => {
   return async function (dispatch, getState, { history }) {
     const parsedPostId = parseInt(postId);
     try {
-      //   const response = await axiosInstance.get(`/api/comments/${parsedPostId}`);
-      const response = RESP.COMMENTSPOSTIDGET;
-      dispatch(getComments(response));
+        const response = await axiosInstance.get(`/api/comments/${parsedPostId}`);
+      // const response = RESP.COMMENTSPOSTIDGET;
+      // console.log("슈슉", response.data.content)
+      dispatch(getComments(response.data.content));
     } catch (err) {
       console.error(err);
     }
   };
 };
-const addCommentDB = (postId, username, nickName, comment_content) => {
+
+
+const addCommentDB = (data) => {
   return async function (dispatch, getState, { history }) {
     try {
-      // const response = await axiosInstance.post(`/api/comments/${postId}`, {
-      //   postId,
-      //   username,
-      //   nickName,
-      //   comment_content,
-      // });
-      const response = RESP.COMMENTSPOSTIDPOST;
-      if (response.result === true) {
-        dispatch(
-          addComment({
-            postId: postId,
-            username,
-            nickName,
-            comment_content,
-            commentId: Date.now(),
-          })
-        );
+      const response = await axiosInstance.post(`/api/comments/${data.postId}`, data);
+
+      if (response.data.result === true) {
+          // dispatch(
+          //   addComment({
+          //   postId: postId,
+          //   username,
+          //   nickName,
+          //   comment_content,
+          //   commentId: Date.now(),
+          //   }));
+          dispatch(getCommentsDB(data.postId));
       }
     } catch (error) {
       console.error(error);
     }
   };
 };
+
+
 const deleteCommentDB = (commentId) => {
   return async function (dispatch, getState, { history }) {
     try {
-      //   const response = await axiosInstance.delete(`/api/comments/${commentId}`);
-      const response = RESP.COMMENTSIDDELETE;
-      if (response.result === true) {
+        const response = await axiosInstance.delete(`/api/comments/${commentId}`);
+      // const response = RESP.COMMENTSIDDELETE;
+      if (response.data.result === true) {
         dispatch(deleteComment(commentId));
       }
     } catch (error) {
@@ -86,29 +90,35 @@ const deleteCommentDB = (commentId) => {
     }
   };
 };
+
+
 const getDetailCommentDB = (commentId) => {
   return async function (dispatch, getState, { history }) {
     console.log(commentId);
     try {
-      //   const response = await axiosInstance.get(`/api/comments/${commentId}`);
-      const response = RESP.COMMENTSIDGET;
-      dispatch(getDetailComment(response));
+        const response = await axiosInstance.get(`/api/comments/edit/${commentId}`);
+      // const response = RESP.COMMENTSIDGET;
+        // console.log("수정을 해볼게용", response.data)
+      dispatch(getDetailComment(response.data));
     } catch (err) {
       console.error(err);
     }
   };
 };
+
 const editCommentDB = (username, nickName, comment_content, commentId) => {
   return async function (dispatch, getState, { history }) {
     try {
-      // const response = await axiosInstance.put(`/api/comments/${commentId}`, {
-      //   username,
-      //   nickName,
-      //   comment_content,
-      // });
-      const response = RESP.COMMENTSIDPUT;
-      if (response.result === true) {
+      const response = await axiosInstance.put(`/api/comments/${commentId}`, {
+        username,
+        nickName,
+        comment_content,
+      });
+      // const response = RESP.COMMENTSIDPUT;
+      // console.log("???????", response)
+      if (response.data.result === true) {
         window.alert("댓글이 수정되었습니다.");
+        // console.log("??????????",response.data.content)
         dispatch(
           editComment({
             commentId,

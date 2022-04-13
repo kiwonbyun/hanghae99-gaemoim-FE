@@ -18,9 +18,7 @@ const Permit = (props) => {
             </React.Fragment>
         )
     }
-
     return null;
-
 }
 
 export default Permit;

@@ -20,16 +20,19 @@ const Header = () => {
       <Container>
         <div>
           <img
-            onClick={() => {
-              history.push("/");
-            }}
             src="https://blog.kakaocdn.net/dn/uuLiH/btry9n1iMIt/1HgIlc2lE9chKhBBxUVBR0/img.png"
-          ></img>
+            onClick={() => {
+              history.push("/0");
+            }}
+          />
         </div>
         <div>
           <span>{user.user.nickName}님 안녕하세요!</span>
-          <Button size="S">내정보</Button>
-          <Button size="S" onClick={logoutClick}>
+          <Button size="S" onClick={() => {
+            history.push("/mypage");
+          }
+          }>내정보</Button>
+          <Button size="S" color="light" onClick={logoutClick}>
             로그아웃
           </Button>
         </div>
@@ -41,10 +44,10 @@ const Header = () => {
       <div>
         <img
           onClick={() => {
-            history.push("/");
+            history.push("/0");
           }}
           src="https://blog.kakaocdn.net/dn/uuLiH/btry9n1iMIt/1HgIlc2lE9chKhBBxUVBR0/img.png"
-        ></img>
+        />
       </div>
       <div>
         <Button
@@ -57,6 +60,7 @@ const Header = () => {
         </Button>
         <Button
           size="S"
+          color="light"
           onClick={() => {
             history.push("/signup");
           }}
@@ -70,19 +74,24 @@ const Header = () => {
 
 const Container = styled.div`
   display: flex;
+
+  margin: auto;
+  padding: 0px 10px;
+
+  width: 70vw;
+
   align-items: center;
   justify-content: space-between;
-  padding: 0px 10px;
   div {
     &:first-child {
       img {
         width: 150px;
-        height: 100px;
+        height: 140px;
       }
     }
     &:last-child {
       button {
-        margin-left: 20px;
+        margin-left: 5px;
       }
       span {
         font-size: 15px;
