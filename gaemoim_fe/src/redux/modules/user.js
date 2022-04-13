@@ -13,7 +13,7 @@ const SET_USER = "SET_USER";
 const GET_USER = "GET_USER";
 const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
-
+const LOGIN_CHECK = "LOGIN_CHECK";
 
 
 // 액션 생성
@@ -21,7 +21,7 @@ const setUser = createAction(SET_USER, (user) => ({ user }));
 const getUser = createAction(GET_USER, (user) => ({ user }));
 const logIn = createAction(LOG_IN, (user) => ({ user }))
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
-
+const loginCheck = createAction(LOGIN_CHECK, (loginCheck) => ({loginCheck}))
 
 // initialState
 const initialState = {
@@ -83,7 +83,6 @@ const logInDB = (username, password) => {
     }).catch((error) => {
         console.log(error.response)
     })
-
   }
 }
 
@@ -91,13 +90,17 @@ const logInDB = (username, password) => {
 const loginCheckDB = () => {
   return function (dispatch, getState, {history}) {
   axiosInstance
-    .get("/api/islogin")
+    .post("/api/islogin")
     .then((res) => {
       // 응답 데이터 받아서 할 작업 
-      console.log("loginCheckDB : response", res);
-      dispatch(getUser(res));
+      // console.log("loginCheckDB : response", res);
+      dispatch(getUser({
+        username: res.data.username,
+        nickName: res.data.nickName,
+        position: res.data.position,
+      }));
     }).catch((error) => {
-      console.log(error);
+      console.log(error.response);
     })
   }
 }
@@ -123,12 +126,12 @@ export default handleActions(
     }),
     [GET_USER]: (state, action) => produce(state, (draft) => {
       setCookie("is_login", "success");
-      draft.user = action.payload.user;
+      draft.usergu = action.payload.user;
       draft.is_login = true;
     }),
     [LOG_IN]: (state, action) => produce(state, (draft) => {
       setCookie("is_login", "success");
-      draft.user = { ...action.payload };
+      draft.userli = { ...action.payload };
       draft.is_login = true;
     }),
     [LOG_OUT]: (state, action) => produce(state, (draft) => {
@@ -136,6 +139,7 @@ export default handleActions(
       draft.user = null;
       draft.is_login = false;
     }),
+
   }, initialState
 )
 
@@ -144,6 +148,7 @@ const actionCreators = {
   getUser,
   logIn,
   logOut,
+  loginCheck,
   signUpDB,
   logInDB,
   loginCheckDB,

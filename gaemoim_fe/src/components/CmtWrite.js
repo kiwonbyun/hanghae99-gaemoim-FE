@@ -13,7 +13,7 @@ const CmtWrite = () => {
 
   const comment = React.useRef(null);
 
-  const user = useSelector((state) => state?.user?.user?.user)
+  const user = useSelector((state) => state?.user.usergu);
 
   console.log("CmtWrite : params", params);
   console.log("CmtWrite : user", user)
@@ -21,16 +21,15 @@ const CmtWrite = () => {
   const addComment = () => {
     const comment_data = {
       postId: Number(params.postid),
-      username: user.USER_NAME,
-      nickName: user.NICK_NAME,
+      username: user.username,
+      nickName: user.nickName,
       comment_content: comment.current.value,
     }
     // console.log("CmtWrite : comment_content", comment_data.comment_content)
-  
     dispatch(commentActions.addCommentDB(comment_data, postId));
+    comment.current.value ="";
   }
 
-  
   return (
     <React.Fragment>
       <Grid>

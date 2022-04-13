@@ -20,19 +20,17 @@ const PostWrite = (props) => {
   const frontNum = React.useRef(null);
   const backNum = React.useRef(null);
 
-  console.log("PostWrite : params", params);
 
 
-  const user = useSelector((state) => state.user.user.user)
+  const user = useSelector((state) => state.user.usergu)
   const post = useSelector((state) => state.post.dtPost)
-
   // console.log("PostWrite : post",post)
 
   const addPost = () => {
     const post_data = {
       title: title.current.value,
-      username: user.USER_NAME,
-      nickName: user.NICK_NAME,
+      username: user.username,
+      nickName: user.nickName,
       post_content: post_content.current.value,
       frontNum: frontNum.current.value,
       backNum: backNum.current.value,

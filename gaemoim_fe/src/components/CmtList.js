@@ -26,7 +26,6 @@ const CmtList = () => {
   return (
     <React.Fragment>
       {comment.map((comment,idx) => {
-        return (
           <Grid key={idx}>
             <hr />
             <Grid is_flex padding="5px" margin="10px 0">
@@ -38,7 +37,6 @@ const CmtList = () => {
               </Grid>
             </Grid>
           </Grid>
-        );
       })}
     </React.Fragment>
   );

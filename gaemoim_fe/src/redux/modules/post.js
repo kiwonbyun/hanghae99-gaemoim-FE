@@ -33,6 +33,8 @@ const initialPost = {
 }
 
 // 미들웨어
+
+
 // 포스트 목록 가져오기
 const getPostDB = () => {
   return async function (dispatch, getState, { history }) {
@@ -52,7 +54,7 @@ const getPostDB = () => {
 const getDetailPostDB = (params) => {
   return async function (dispatch, getState, { history }) {
     axiosInstance
-      .get("/api/post/" + params)
+      .get("/api/post/detail/" + params)
       .then((res) => {
         // console.log("getDetailPostDB : response ", res.data);
         dispatch(getDetailPost(res.data));
@@ -117,7 +119,7 @@ const editPostDB = (post_data) => {
     axiosInstance
       .put(`/api/post/${post_data.postId}`, post_data)
       .then((res) => {
-        // console.log("editPostDB : response", res);
+        console.log("editPostDB : response", res);
         if(res.data.result === true) {
         dispatch(editPost(res));
         history.push(`/post/${post_data.postId}`)

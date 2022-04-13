@@ -8,10 +8,12 @@ import { Button } from "../elements";
 
 
 
-const Main = (props) => {
+const Main2 = (props) => {
 
   const history = useHistory();
   const dispatch = useDispatch();
+  const params = useParams();
+  console.log("파람파람", params);
   const post_list = useSelector((state) => state.post.list);
 
   console.log("Main : post_list", post_list)
@@ -122,4 +124,4 @@ const Addbutton = styled.button`
   right: 70px;
 `;
 
-export default Main;
+export default Main2;

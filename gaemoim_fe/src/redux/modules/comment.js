@@ -33,29 +33,33 @@ const initialState = {
 
 const getCommentDB = (params) => {
   return async function (dispatch, getState, { history }) {
+  const postId = parseInt(params)
     axiosInstance
-      .get("/api/comment/"+params)
+      .get(`/api/comments/${postId}`)
       .then((res) => {
         console.log("getCommentDB : response", res);
-        // dispatch(getComment(res));
+        dispatch(getComment(res.data.content));
       }).catch((error) => {
-        // window.alert(error);
+        window.alert(error.response);
       })
   }
 }
 
-const addCommentDB = (comment, postId) => {
+const addCommentDB = (comment, params) => {
   return async function (dispatch, getState, { history }) {
     console.log("addCommentDB : comment", comment);
+    const postId = parseInt(params);
+    console.log(postId)
+
     axiosInstance
-      .post(`/api/comment/${postId}`, { ...comment })
+      .post(`/api/comments/${postId}`, comment)
       .then((res) => {
 
         console.log("addCommentDB : response", res); 
-        dispatch(addComment(res.data));
+        dispatch(addComment(comment));
 
       }).catch((error) => {
-        console.log(error);
+        console.log(error.response);
       })
   }
 }

@@ -11,7 +11,7 @@ const Header = (props) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const user = useSelector((state) => state.user.user?.user)
+  const user = useSelector((state) => state.user.usergu);
   const is_login = useSelector((state) => state.user.is_login);
   // console.log("Header : user", user, is_login);
   
@@ -28,7 +28,7 @@ const Header = (props) => {
         </div>
         <div>
           <Grid is_flex width="fit-content" align="right">
-            <Text bold >🧡{user.NICK_NAME}</Text>
+            <Text bold >🧡{user.nickName}</Text>
             <Text>님 안녕하세요!</Text>
             <Button size="S" onClick={() => { logout(); history.push("/"); }}>로그아웃</Button>
             {/* <Button size="S" color="light" onClick={() => { history.push("/signup"); }}>회원가입</Button> */}
