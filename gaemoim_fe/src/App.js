@@ -4,6 +4,11 @@ import { ConnectedRouter } from "connected-react-router";
 import { history } from "./redux/configStore";
 import { useDispatch } from "react-redux";
 import { actionCreators } from "./redux/modules/user";
+import { actionCreators2 } from "./redux/modules/post";
+import Write from "./Write";
+import Detail from "./Detail";
+import Postedit from "./Postedit";
+import Mainpage from "./Main_page";
 
 import Header from "./Header";
 import Signup from "./Signup";
@@ -37,6 +42,15 @@ function App() {
           </Route>
           <Route path="/" exact>
             <Main />
+          </Route>
+          <Route path="/:id" exact>
+            <Mainpage />
+          </Route>
+          <Route path="/detail/:postid">
+            <Detail />
+          </Route>
+          <Route path="/write/edit/:postid">
+            <Postedit />
           </Route>
         </Switch>
         <Route path="/post" exact component={PostDetail}/>

@@ -2,11 +2,13 @@ import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import axiosInstance from "../../shared/request";
 import { RESP } from "../../response";
+import jwt_decode from "jwt-decode";
 
 //action
 const SETUSER = "Setuser";
 const GETUSER = "Getuser";
 const DELETEUSER = "Deleteuser";
+const IDCHECK = "idCheck";
 
 //initialState
 
@@ -19,58 +21,106 @@ const initialState = {
 const setUser = createAction(SETUSER, (user) => ({ user }));
 const getUser = createAction(GETUSER, (user) => ({ user }));
 const deleteUser = createAction(DELETEUSER, (user) => ({ user }));
+const idCheck = createAction(IDCHECK, (result) => ({ result }));
 
 //middlewares
-const signUpDB = (id, nickname, pw, pwCf, position) => {
+const idCheckDB = (id) => {
   return async function (dispatch, getState, { history }) {
-    console.log("여기는 signUpDB 미들웨어요");
-    //  const response =  await axiosInstance.post("/api/register", {})
-    const response = RESP.REGISTERPOST;
-    console.log(response.result);
-    if (response.result === "success") {
-      window.alert("환영합니다! 로그인 해주세요 :)");
-      history.replace("/login");
+    try {
+      const response = await axiosInstance.post("/api/idCheck", {
+        username: id,
+      });
+      // const response = RESP.IDCHECKPOST;
+      if (response.data.result === true) {
+        dispatch(idCheck(response.data.result));
+      } else {
+        window.alert("중복된 아이디가 있습니다. 수정해주세요");
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+const signUpDB = (id, nickName, pw, pwCf, position) => {
+  return async function (dispatch, getState, { history }) {
+    try {
+      const response = await axiosInstance.post("/api/register", {
+        username: id,
+        nickName,
+        password: pw,
+        passwordCheck: pwCf,
+        position,
+      });
+      // const response = RESP.REGISTERPOST;
+      if (response.data.result === true) {
+        window.alert("환영합니다! 로그인 해주세요 :)");
+        history.replace("/login");
+      } else if (response.data.result === false) {
+        window.alert(response.errormessage);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 };
 const logInDB = (id, pw) => {
   return async function (dispatch, getState, { history }) {
-    console.log("여기는 logInDB 미들웨어입니다.");
-    //   const response = await axiosInstance.post("/api/login", {})
-    const response = RESP.LOGINPOST;
-    console.log(response);
-    if (response.result === "success") {
-      const accessToken = response.token;
-      sessionStorage.setItem("token", accessToken);
-      dispatch(
-        getUser({
-          userId: response.userId,
-          nickName: response.nickName,
-          position: response.position,
-        })
-      );
-      window.alert("환영합니다!");
-      history.replace("/");
-    } else {
-      window.alert("아이디 혹은 비밀번호가 잘못되었습니다!");
+    try {
+      const response = await axiosInstance.post("/api/login", {
+        username: id,
+        password: pw,
+      });
+      // const response = RESP.LOGINPOST;
+      if (response.status === 200) {
+        const accessToken = response.headers.authorization;
+        let decoded = jwt_decode(accessToken);
+        sessionStorage.setItem("token", accessToken);
+        dispatch(
+          getUser({
+            username: decoded.USER_NAME,
+            nickName: decoded.NICK_NAME,
+            position: decoded.POSITION,
+            // username: "bkw9604",
+            // nickName: "카이저쏘제",
+            // position: "프론트엔드",
+          })
+        );
+        window.alert("환영합니다!");
+        history.replace("/");
+        return;
+      } else if (response.result === false) {
+        window.alert(response.errormessage);
+        return;
+      }
+    } catch (err) {
+      if (err.response.status === 401) {
+        window.alert("비밀번호를 확인해주세요.");
+      }
       return;
     }
   };
 };
 const userCheckDB = () => {
   return async function (dispatch, getState, { history }) {
-    console.log("여기는 userCheckDB 입니다.");
-    //   const response = await axiosInstance.get("/api/islogin")
-    const response = RESP.ISLOGINGET;
-    console.log(response);
-    if (response.nickName) {
-      dispatch(
-        getUser({
-          userId: response.userId,
-          nickName: response.nickName,
-          position: response.position,
-        })
-      );
+    try {
+      const response = await axiosInstance.post("/api/islogin");
+      // const response = RESP.ISLOGINGET;
+      if (response.data.nickName) {
+        dispatch(
+          getUser({
+            username: response.data.username,
+            nickName: response.data.nickName,
+            position: response.data.position,
+          })
+        );
+      } else {
+        return;
+      }
+    } catch (err) {
+      console.log(err.response);
     }
   };
 };
@@ -90,6 +140,10 @@ export default handleActions(
         draft.user = null;
         draft.is_login = false;
       }),
+    [IDCHECK]: (state, action) =>
+      produce(state, (draft) => {
+        draft.id_Check = action.payload.result;
+      }),
   },
 
   initialState
@@ -101,6 +155,7 @@ const actionCreators = {
   logInDB,
   userCheckDB,
   deleteUser,
+  idCheckDB,
 };
 
 export { actionCreators };

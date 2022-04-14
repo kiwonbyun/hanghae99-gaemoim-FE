@@ -6,17 +6,17 @@ import { useHistory, useParams } from "react-router-dom";
 import post, { actionCreators2 } from "./redux/modules/post";
 import Pagination from "react-js-pagination";
 
-const Main = (props) => {
+const Mainpage = (props) => {
   const params = useParams();
   const history = useHistory();
   const dispatch = useDispatch();
   const is_login = useSelector((state) => state.user.is_login);
-  const post_list = useSelector((state) => state.post.list.content);
-  const pageNum = useSelector((state) => state.post.list.totalPages);
+  const post_list = useSelector((state) => state.post.list?.content);
+  const pageNum = useSelector((state) => state.post.list?.totalPages);
   const itemPerPage = useSelector((state) => state.post.list.size);
   const totalElementsNum = useSelector(
-    (state) => state.post.list
-  ).totalElements;
+    (state) => state.post?.list?.totalElements
+  );
   const [page, setPage] = useState(1);
 
   const handlePageChange = (page) => {
@@ -24,8 +24,8 @@ const Main = (props) => {
     history.push(`/${page}`);
   };
   React.useEffect(() => {
-    dispatch(actionCreators2.getPostDB());
-  }, []);
+    dispatch(actionCreators2.getPostpageDB(params.id));
+  }, [params.id]);
 
   if (is_login) {
     return (
@@ -64,7 +64,6 @@ const Main = (props) => {
         })}
         <Grid>
           <Pagination
-            itemClass="pagination"
             activePage={page}
             itemsCountPerPage={itemPerPage}
             totalItemsCount={totalElementsNum}
@@ -118,7 +117,6 @@ const Main = (props) => {
       })}
       <Grid>
         <Pagination
-          itemClass="pagination"
           activePage={page}
           itemsCountPerPage={itemPerPage}
           totalItemsCount={totalElementsNum}
@@ -129,6 +127,7 @@ const Main = (props) => {
     </Container>
   );
 };
+
 const Grid = styled.div`
   width: fit-content;
   margin: auto;
@@ -245,4 +244,4 @@ const Addbutton = styled.button`
   }
 `;
 
-export default Main;
+export default Mainpage;

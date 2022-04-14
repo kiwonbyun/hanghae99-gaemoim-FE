@@ -13,12 +13,18 @@ const Header = () => {
   const logoutClick = () => {
     sessionStorage.removeItem("token");
     dispatch(actionCreators.deleteUser());
+    history.replace("/");
   };
   if (is_login) {
     return (
       <Container>
         <div>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png"></img>
+          <img
+            onClick={() => {
+              history.push("/");
+            }}
+            src="https://blog.kakaocdn.net/dn/uuLiH/btry9n1iMIt/1HgIlc2lE9chKhBBxUVBR0/img.png"
+          ></img>
         </div>
         <div>
           <span>{user.user.nickName}님 안녕하세요!</span>
@@ -33,7 +39,12 @@ const Header = () => {
   return (
     <Container>
       <div>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1920px-Google_2015_logo.svg.png"></img>
+        <img
+          onClick={() => {
+            history.push("/");
+          }}
+          src="https://blog.kakaocdn.net/dn/uuLiH/btry9n1iMIt/1HgIlc2lE9chKhBBxUVBR0/img.png"
+        ></img>
       </div>
       <div>
         <Button
@@ -61,11 +72,12 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 10px;
+  padding: 0px 10px;
   div {
     &:first-child {
       img {
-        width: 200px;
+        width: 150px;
+        height: 100px;
       }
     }
     &:last-child {
