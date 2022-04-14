@@ -1,70 +1,53 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 🐶 개모임 : 개발자들의 모임
 
-## Available Scripts
 
-In the project directory, you can run:
 
-### `yarn start`
+프로젝트에 필요한 인원을 구인하는 페이지입니다. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## ⚙ 주요 기능
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+  #### API설계 [노션](https://cyber-biology-9fd.notion.site/c303f02b79fc4506a025145a7adc4701)
 
-### `yarn test`
+  #### WIREFRAME [PIGMA](https://www.figma.com/file/B6WEXes2RDdsOecbfTQKqP/%EB%AF%B8%EB%8B%88%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8?node-id=0%3A1)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+  ### 1. 회원가입 / 로그인
+    - 
+  ### 2. 메인 페이지 (게시글 목록)
+    - CRUD
+    - 사용자가 모집 현황을 알 수 있도록 표시
+    - 페이지네이션
 
-### `yarn build`
+  ### 3. 상세 페이지
+    - 유저 스택에 따른 참여 카운트
+      - 참여버튼 다시 선택시 참여 취소.
+      - 인원이 다 찼을 경우 더이상 참여 불가.
+    - 코멘트 CRUD
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<br>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## 🔨 개발 툴
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  <a href="" target="_blank"><img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=React&logoColor=white"/></a>
+  <a href="" target="_blank"><img src="https://img.shields.io/badge/Redux-764ABC?style=flat-square&logo=Redux&logoColor=white"/></a>
+  
+<br>
 
-### `yarn eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 👨‍👩‍👧 팀원
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+|  이름  |                          깃허브 주소                           |       포지션       |
+| :----: | :------------------------------------------------------------: | :----------------: |
+| 지수민 |      [https://github.com/sumye](https://github.com/sumye)      |    백엔드(스프링)   |
+| 오예령 | [https://github.com/ohyeryung](https://github.com/ohyeryung)   |    백엔드(스프링)   |
+| 김빛찬 |   [https://github.com/blingbc9](https://github.com/blingbc9)   |    백엔드(스프링)   |
+| 엄성훈 |  [https://github.com/umsounghun](https://github.com/umsounghun)|    백엔드(스프링)   |
+| 변기원 |  [https://github.com/kiwonbyun](https://github.com/kiwonbyun)  |  프론트엔드(리액트) |
+| 서유나 |   [https://github.com/rriverr](https://github.com/rriverr)     | 프론트엔드(리액트)  |
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+**BacK End** : https://github.com/ohyeryung/mini22.git
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+**Front End** : https://github.com/bkw9603/hanghae99-gaemoim-FE
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<br>
