@@ -17,7 +17,6 @@ const Mainpage = (props) => {
   const totalElementsNum = useSelector(
     (state) => state.post?.list?.totalElements
   );
-  console.log(totalElementsNum);
   const [page, setPage] = useState(1);
 
   const handlePageChange = (page) => {

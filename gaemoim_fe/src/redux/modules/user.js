@@ -74,11 +74,9 @@ const logInDB = (id, pw) => {
         password: pw,
       });
       // const response = RESP.LOGINPOST;
-      console.log(response);
       if (response.status === 200) {
         const accessToken = response.headers.authorization;
         let decoded = jwt_decode(accessToken);
-        console.log(decoded);
         sessionStorage.setItem("token", accessToken);
         dispatch(
           getUser({
@@ -98,7 +96,6 @@ const logInDB = (id, pw) => {
         return;
       }
     } catch (err) {
-      console.log(err.response);
       if (err.response.status === 401) {
         window.alert("비밀번호를 확인해주세요.");
       }

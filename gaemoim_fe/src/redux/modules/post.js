@@ -44,7 +44,7 @@ const backJoin = createAction(BEJOIN, (info) => ({ info }));
 const getPostpageDB = (page) => {
   return async function (dispatch, getState, { history }) {
     const response = await axiosInstance.get(`/api/post?page=${page - 1}`);
-    console.log(response);
+
     if (response.status === 200) {
       dispatch(getPagePost(response.data));
     }
@@ -67,7 +67,6 @@ const getDetailPostDB = (postId) => {
       const numPostId = parseInt(postId);
       const response = await axiosInstance.get(`/api/post/detail/${numPostId}`);
       // const response = RESP.POSTPOSTIDGET;
-      console.log(response);
       if (response.status === 200) {
         dispatch(
           getDetailPost({
@@ -77,9 +76,7 @@ const getDetailPostDB = (postId) => {
           })
         );
       }
-    } catch (err) {
-      console.log(err.response);
-    }
+    } catch (err) {}
   };
 };
 const addPostDB = (title, frontNum, backNum, content, position) => {
@@ -96,7 +93,6 @@ const addPostDB = (title, frontNum, backNum, content, position) => {
         post_content: content,
         completed: false,
       });
-      console.log(response);
       // const response = RESP.POSTPOST;
       if (response.status === 200) {
         window.alert("게시물이 작성되었습니다.");
@@ -112,9 +108,7 @@ const addPostDB = (title, frontNum, backNum, content, position) => {
         );
         history.push("/");
       }
-    } catch (error) {
-      console.log(error.response);
-    }
+    } catch (error) {}
   };
 };
 const deletePostDB = (postId) => {
@@ -127,9 +121,7 @@ const deletePostDB = (postId) => {
         window.alert("게시물이 삭제되었습니다.");
         history.replace("/");
       }
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {}
   };
 };
 const editPostDB = (postId, title, FEnum, BEnum, content) => {
@@ -164,16 +156,18 @@ const frontJoinDB = (postId) => {
         }
       );
       // const response = RESP.FRONTPOSTIDPOST;
-      console.log(response);
       if (response.data.join === true) {
         window.alert("프론트엔드로 프로젝트 참여했습니다.");
         dispatch(frontJoin(response));
+      } else if (response.data === "이미 백엔드에 참여를 하셨습니다.") {
+        window.alert("이미 백엔드에 참여를 하셨습니다.");
+        return;
       } else if (response.data.join === false) {
-        window.alert("참여가 취소되었습니다.");
+        window.alert("프론트엔트 참여가 취소되었습니다.");
         dispatch(frontJoin(response));
       }
     } catch (err) {
-      if (err.response.status === 500) {
+      if (err.response) {
         window.alert("참여가 마감되었거나, 백엔드로 이미 참여하셨습니다.");
       }
     }
@@ -190,14 +184,15 @@ const backJoinDB = (postId) => {
         }
       );
       // const response = RESP.BACKPOSTIDPOST;
-      console.log(response);
       if (response.data.join === true) {
         window.alert("백엔드로 프로젝트 참여했습니다.");
         dispatch(backJoin(response));
-      } else if (response.data.join === false) {
-        window.alert("참여가 취소되었습니다.");
-        dispatch(backJoin(response));
+      } else if (response.data === "이미 프론트엔드에 참여를 하셨습니다.") {
+        window.alert("이미 프론트엔드에 참여를 하셨습니다.");
         return;
+      } else if (response.data.join === false) {
+        window.alert("백엔트 참여가 취소되었습니다.");
+        dispatch(frontJoin(response));
       }
     } catch (err) {
       console.log(err.response);

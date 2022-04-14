@@ -42,9 +42,7 @@ const getCommentsDB = (postId, user_position) => {
       const response = await axiosInstance.get(`/api/comments/${parsedPostId}`);
       // const response = RESP.COMMENTSPOSTIDGET;
       dispatch(getComments(response));
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {}
   };
 };
 const addCommentDB = (
@@ -63,7 +61,6 @@ const addCommentDB = (
         position: user_position,
         comment_content,
       });
-      console.log(response);
       // const response = RESP.COMMENTSPOSTIDPOST;
       if (response.status === 200) {
         // dispatch(
@@ -77,16 +74,13 @@ const addCommentDB = (
         // );
         dispatch(getCommentsDB(postId, user_position));
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
 };
 const deleteCommentDB = (commentId) => {
   return async function (dispatch, getState, { history }) {
     const response = await axiosInstance.delete(`/api/comments/${commentId}`);
     // const response = RESP.COMMENTSIDDELETE;
-    console.log(response);
     if (response.data.result === true) {
       dispatch(deleteComment(commentId));
     }
@@ -99,11 +93,9 @@ const getDetailCommentDB = (commentId) => {
         `/api/comments/edit/${commentId}`
       );
       // const response = RESP.COMMENTSIDGET;
-      console.log(response);
+
       dispatch(getDetailComment(response));
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {}
   };
 };
 const editCommentDB = (username, nickName, comment_content, commentId) => {
@@ -126,9 +118,7 @@ const editCommentDB = (username, nickName, comment_content, commentId) => {
           })
         );
       }
-    } catch (err) {
-      console.error(err);
-    }
+    } catch (err) {}
   };
 };
 
@@ -137,7 +127,6 @@ export default handleActions(
   {
     [GETCOMMENTS]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.comment_list);
         draft.list = action.payload.comment_list;
         draft.comment_is_loading = true;
       }),

@@ -12,7 +12,6 @@ const Write = () => {
   const login_user = useSelector((state) => state.user.user);
 
   const position = login_user?.position;
-  console.log(position);
   const writeBtnClick = () => {
     const frontNum = FEnumref.current.value;
     const title = titleref.current.value;

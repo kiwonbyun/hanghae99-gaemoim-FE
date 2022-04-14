@@ -23,7 +23,6 @@ const Comments = (props) => {
     dispatch(actionCreators3.deleteCommentDB(commentId));
   };
   const editBtnClick = (e) => {
-    console.log(e.target.value);
     dispatch(actionCreators3.getDetailCommentDB(e.target.value));
     setEditing((curr) => !curr);
   };

@@ -10,7 +10,6 @@ const CommentEdit = (props) => {
   );
   const contentref = useRef();
 
-  console.log(editingComment);
   const editBtnClick = () => {
     const content = contentref.current.value;
     dispatch(

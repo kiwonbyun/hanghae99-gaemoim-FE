@@ -31,7 +31,6 @@ const Signup = () => {
     const pw = pwref.current.value;
     const pwCf = pwconfirmref.current.value;
     const position = positionref.current.value;
-    console.log("눌림?");
 
     if (id === "" || nickname === "" || pw === "" || pwCf === "") {
       window.alert("아이디,닉네임,비밀번호는 필수입니다.");
