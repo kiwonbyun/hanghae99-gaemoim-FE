@@ -159,9 +159,11 @@ const frontJoinDB = (postId) => {
       const response = await axiosInstance.post(`/api/front/${postId}`);
       // const response = RESP.FRONTPOSTIDPOST;
       console.log(response);
-      if (response.bool === true) {
+      return;
+      if (response.data.join === true) {
+        window.alert("프론트엔드로 프로젝트 참여했습니다.");
         dispatch(frontJoin(response));
-      } else if (response.bool === false) {
+      } else if (response.data.join === false) {
         window.alert("참여가 취소되었습니다.");
         dispatch(frontJoin(response));
       }
@@ -176,9 +178,10 @@ const backJoinDB = (postId) => {
       const response = await axiosInstance.post(`/api/back/${postId}`);
       // const response = RESP.BACKPOSTIDPOST;
       console.log(response);
-      if (response.bool === true) {
+      if (response.data.join === true) {
+        window.alert("백엔드로 프로젝트 참여했습니다.");
         dispatch(backJoin(response));
-      } else if (response.bool === false) {
+      } else if (response.data.join === false) {
         window.alert("참여가 취소되었습니다.");
         dispatch(backJoin(response));
         return;
@@ -199,7 +202,7 @@ export default handleActions(
       }),
     [PAGEGETPOST]: (state, action) =>
       produce(state, (draft) => {
-        draft.pagelist = action.payload.post_list;
+        draft.list = action.payload.post_list;
         draft.is_loading = true;
       }),
     [GETDETAILPOST]: (state, action) =>
@@ -211,23 +214,8 @@ export default handleActions(
       produce(state, (draft) => {
         // draft.list.unshift(action.payload.post);
       }),
-    [FEJOIN]: (state, action) =>
-      produce(state, (draft) => {
-        console.log(draft.detailPost.frontTotalJoin);
-        if (action.payload.info.bool === true) {
-          draft.detailPost.frontTotalJoin = action.payload.info.frontCnt;
-        } else if (action.payload.info.bool === false) {
-          draft.detailPost.frontTotalJoin = action.payload.info.frontCnt;
-        }
-      }),
-    [BEJOIN]: (state, action) =>
-      produce(state, (draft) => {
-        if (action.payload.info.bool === true) {
-          draft.detailPost.backTotalJoin = action.payload.info.backCnt;
-        } else if (action.payload.info.bool === false) {
-          draft.detailPost.backTotalJoin = action.payload.info.backCnt;
-        }
-      }),
+    [FEJOIN]: (state, action) => produce(state, (draft) => {}),
+    [BEJOIN]: (state, action) => produce(state, (draft) => {}),
   },
   initialState
 );

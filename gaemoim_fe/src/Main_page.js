@@ -11,12 +11,13 @@ const Mainpage = (props) => {
   const history = useHistory();
   const dispatch = useDispatch();
   const is_login = useSelector((state) => state.user.is_login);
-  const post_list = useSelector((state) => state.post.pagelist?.content);
-  const pageNum = useSelector((state) => state.post.pagelist?.totalPages);
+  const post_list = useSelector((state) => state.post.list?.content);
+  const pageNum = useSelector((state) => state.post.list?.totalPages);
+  const itemPerPage = useSelector((state) => state.post.list.size);
   const totalElementsNum = useSelector(
-    (state) => state.post?.pagelist?.totalElements
+    (state) => state.post?.list?.totalElements
   );
-
+  console.log(totalElementsNum);
   const [page, setPage] = useState(1);
 
   const handlePageChange = (page) => {
@@ -24,7 +25,6 @@ const Mainpage = (props) => {
     history.push(`/${page}`);
   };
   React.useEffect(() => {
-    console.log(params.id);
     dispatch(actionCreators2.getPostpageDB(params.id));
   }, [params.id]);
 
@@ -46,23 +46,28 @@ const Mainpage = (props) => {
                 </span>
               </div>
               <div>
-                <span>{p.nickName}</span>
-                {p.completed ? (
-                  <Button color="light">모집완료</Button>
-                ) : (
-                  <Button>모집중</Button>
-                )}
+                <div>
+                  <span>
+                    {p.nickName}/{p.position}
+                  </span>
+                  {p.completed ? (
+                    <Button color="light">모집완료</Button>
+                  ) : (
+                    <Button>모집중</Button>
+                  )}
+                </div>
+                <div>
+                  <span>{p.createdAt}</span>
+                </div>
               </div>
             </Postbox>
           );
         })}
         <Pagination
           activePage={page}
-          itemsCountPerPage={10}
+          itemsCountPerPage={itemPerPage}
           totalItemsCount={totalElementsNum}
           pageRangeDisplayed={pageNum}
-          prevPageText={"‹"}
-          nextPageText={"›"}
           onChange={handlePageChange}
         />
         <Addbutton
@@ -92,22 +97,36 @@ const Mainpage = (props) => {
               </span>
             </div>
             <div>
-              <span>{p.nickName}</span>
-              {p.completed ? (
-                <Button color="light">모집완료</Button>
-              ) : (
-                <Button>모집중</Button>
-              )}
+              <div>
+                <span>
+                  {p.nickName}/{p.position}
+                </span>
+                {p.completed ? (
+                  <Button color="light">모집완료</Button>
+                ) : (
+                  <Button>모집중</Button>
+                )}
+              </div>
+              <div>
+                <span>{p.createdAt}</span>
+              </div>
             </div>
           </Postbox>
         );
       })}
+      <Pagination
+        activePage={page}
+        itemsCountPerPage={itemPerPage}
+        totalItemsCount={totalElementsNum}
+        pageRangeDisplayed={pageNum}
+        onChange={handlePageChange}
+      />
     </Container>
   );
 };
 
 const Container = styled.div`
-  width: 70%;
+  width: 80%;
   margin: auto;
 `;
 const Postbox = styled.div`
@@ -115,14 +134,19 @@ const Postbox = styled.div`
   justify-content: space-between;
   font-size: 20px;
   align-items: center;
-  padding: 25px 0px;
-  border-bottom: 2px solid #e6d5b8;
+  padding: 25px 20px;
+  border-radius: 20px;
   margin-bottom: 20px;
+  box-shadow: 2px 2px 2px 2px gray;
+  transition: 0.5s;
+  &:hover {
+    box-shadow: 5px 5px 5px 5px gray;
+  }
   div {
     &:first-child {
       display: flex;
       flex-direction: column;
-      align-items: center;
+
       p {
         font-size: 25px;
         margin-top: -5px;
@@ -131,16 +155,26 @@ const Postbox = styled.div`
         margin-top: -10px;
       }
     }
-    &:last-child {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-right: 20px;
-      button {
-        margin-top: 10px;
-        font-size: 15px;
-        width: 70px;
-        height: 25px;
+    &:nth-child(2) {
+      div {
+        &:first-child {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          span {
+            padding-top: 11px;
+          }
+          button {
+            width: 130px;
+            border-radius: 9999px;
+            font-size: 30px;
+          }
+        }
+        &:last-child {
+          font-size: 15px;
+          text-align: end;
+        }
       }
     }
   }

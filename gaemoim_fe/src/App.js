@@ -36,11 +36,11 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/" exact>
-            <Main />
-          </Route>
           <Route path="/write" exact>
             <Write />
+          </Route>
+          <Route path="/" exact>
+            <Main />
           </Route>
           <Route path="/:id" exact>
             <Mainpage />

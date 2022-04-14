@@ -64,21 +64,17 @@ const Detail = () => {
               <Smallbutton onClick={deleteBtnClick}>삭제</Smallbutton>
             </SmallBtndiv>
           ) : null}
-          <h2>{post.nickName}</h2>
-          <small>{post.position}</small>
+          <h2>
+            {post.nickName}/{post.position}
+          </h2>
         </div>
       </Titlediv>
       <Contentdiv>
         <p>{post.post_content}</p>
-        {login_user ? (
-          <>
-            {login_user.position === "프론트엔드" ? (
-              <button onClick={FEjoinBtnClick}>FE참여하기</button>
-            ) : (
-              <button onClick={BEjoinBtnClick}>BE참여하기</button>
-            )}
-          </>
-        ) : null}
+        <div>
+          <button onClick={FEjoinBtnClick}>FE참여하기</button>
+          <button onClick={BEjoinBtnClick}>BE참여하기</button>
+        </div>
       </Contentdiv>
 
       <CommentInput postId={postId} />
@@ -98,6 +94,9 @@ const Titlediv = styled.div`
   padding: 0px 20px;
   div {
     &:first-child {
+      h1 {
+        text-align: center;
+      }
       span {
         font-size: 15px;
       }
@@ -145,6 +144,9 @@ const Contentdiv = styled.div`
     font-size: 18px;
     margin: auto;
     margin-bottom: 10px;
+  }
+  div {
+    display: flex;
   }
 `;
 export default Detail;
