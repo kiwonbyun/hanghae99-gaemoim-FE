@@ -1,11 +1,6 @@
 import React, { useEffect } from "react";
-import Header from "./Header";
 import { Route, Router, Switch } from "react-router-dom";
 import { ConnectedRouter } from "connected-react-router";
-import Signup from "./Signup";
-import Login from "./Login";
-import Main from "./Main";
-
 import { history } from "./redux/configStore";
 import { useDispatch } from "react-redux";
 import { actionCreators } from "./redux/modules/user";
@@ -14,6 +9,15 @@ import Write from "./Write";
 import Detail from "./Detail";
 import Postedit from "./Postedit";
 import Mainpage from "./Main_page";
+
+import Header from "./Header";
+import Signup from "./Signup";
+import Login from "./Login";
+import Main from "./Main";
+import PostDetail from "./pages/PostDetail";
+import Write from "./pages/Write"
+
+
 
 function App() {
   const dispatch = useDispatch();
@@ -36,9 +40,6 @@ function App() {
           <Route path="/login">
             <Login />
           </Route>
-          <Route path="/write" exact>
-            <Write />
-          </Route>
           <Route path="/" exact>
             <Main />
           </Route>
@@ -52,6 +53,8 @@ function App() {
             <Postedit />
           </Route>
         </Switch>
+        <Route path="/post" exact component={PostDetail}/>
+        <Route path="/write" exact component={Write}/>
       </ConnectedRouter>
     </React.Fragment>
   );
