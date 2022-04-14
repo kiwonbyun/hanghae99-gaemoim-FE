@@ -65,6 +65,7 @@ const OnecommentBox = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   div {
     &:first-child {
       display: flex;

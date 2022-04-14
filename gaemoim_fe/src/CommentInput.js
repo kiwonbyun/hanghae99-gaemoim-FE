@@ -47,17 +47,25 @@ const Container = styled.div`
   textarea {
     margin: 20px 0px;
     font-size: 17px;
+    border-radius: 10px;
+    &:focus {
+      outline-color: #fa9b27;
+    }
   }
   button {
     position: absolute;
-    right: 8px;
-    top: 30px;
+    right: 5px;
+    top: 23px;
     background-color: #e6d5b8;
     border: none;
     border-radius: 9999px;
     padding: 5px 9px;
     color: white;
     transition: 0.2s;
+    width: 80px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: 800;
     &:hover {
       background-color: #fa9b27;
     }

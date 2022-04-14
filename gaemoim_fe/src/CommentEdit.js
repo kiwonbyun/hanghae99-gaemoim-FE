@@ -40,12 +40,12 @@ const CommentEdit = (props) => {
   );
 };
 const Container = styled.div`
-  border: 3px solid #e6d5b8;
-  border-radius: 50px;
+  border: 1px solid black;
+  border-radius: 15px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 75%;
+  width: 74%;
   margin: auto;
   padding: 10px 20px;
   div {
@@ -58,9 +58,10 @@ const Container = styled.div`
         font-weight: 700;
       }
       input {
-        border-radius: 30px;
+        width: 300px;
+        border-radius: 10px;
         font-size: 16px;
-        padding: 5px 20px;
+        padding: 5px 10px;
       }
     }
     &:last-child {

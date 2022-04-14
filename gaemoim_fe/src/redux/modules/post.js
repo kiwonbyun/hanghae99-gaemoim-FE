@@ -156,10 +156,15 @@ const editPostDB = (postId, title, FEnum, BEnum, content) => {
 const frontJoinDB = (postId) => {
   return async function (dispatch, getState, { history }) {
     try {
-      const response = await axiosInstance.post(`/api/front/${postId}`);
+      const response = await axiosInstance.post(
+        `/api/front/${postId}`,
+        {},
+        {
+          headers: { Authorization: sessionStorage.getItem("token") },
+        }
+      );
       // const response = RESP.FRONTPOSTIDPOST;
       console.log(response);
-      return;
       if (response.data.join === true) {
         window.alert("프론트엔드로 프로젝트 참여했습니다.");
         dispatch(frontJoin(response));
@@ -168,14 +173,22 @@ const frontJoinDB = (postId) => {
         dispatch(frontJoin(response));
       }
     } catch (err) {
-      console.error(err);
+      if (err.response.status === 500) {
+        window.alert("참여가 마감되었거나, 백엔드로 이미 참여하셨습니다.");
+      }
     }
   };
 };
 const backJoinDB = (postId) => {
   return async function (dispatch, getState, { history }) {
     try {
-      const response = await axiosInstance.post(`/api/back/${postId}`);
+      const response = await axiosInstance.post(
+        `/api/back/${postId}`,
+        {},
+        {
+          headers: { Authorization: sessionStorage.getItem("token") },
+        }
+      );
       // const response = RESP.BACKPOSTIDPOST;
       console.log(response);
       if (response.data.join === true) {
@@ -187,7 +200,8 @@ const backJoinDB = (postId) => {
         return;
       }
     } catch (err) {
-      console.error(err);
+      console.log(err.response);
+      window.alert("참여가 마감되었거나, 프론트엔드로 이미 참여하셨습니다.");
     }
   };
 };
@@ -214,8 +228,14 @@ export default handleActions(
       produce(state, (draft) => {
         // draft.list.unshift(action.payload.post);
       }),
-    [FEJOIN]: (state, action) => produce(state, (draft) => {}),
-    [BEJOIN]: (state, action) => produce(state, (draft) => {}),
+    [FEJOIN]: (state, action) =>
+      produce(state, (draft) => {
+        draft.detailPost.frontCnt = action.payload.info.data.frontCnt;
+      }),
+    [BEJOIN]: (state, action) =>
+      produce(state, (draft) => {
+        draft.detailPost.backCnt = action.payload.info.data.backCnt;
+      }),
   },
   initialState
 );

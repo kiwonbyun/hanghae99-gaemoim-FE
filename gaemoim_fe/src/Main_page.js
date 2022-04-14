@@ -63,19 +63,21 @@ const Mainpage = (props) => {
             </Postbox>
           );
         })}
-        <Pagination
-          activePage={page}
-          itemsCountPerPage={itemPerPage}
-          totalItemsCount={totalElementsNum}
-          pageRangeDisplayed={pageNum}
-          onChange={handlePageChange}
-        />
+        <Grid>
+          <Pagination
+            activePage={page}
+            itemsCountPerPage={itemPerPage}
+            totalItemsCount={totalElementsNum}
+            pageRangeDisplayed={pageNum}
+            onChange={handlePageChange}
+          />
+        </Grid>
         <Addbutton
           onClick={() => {
             history.push("/write");
           }}
         >
-          글쓰기
+          <div>+</div>
         </Addbutton>
       </Container>
     );
@@ -114,20 +116,65 @@ const Mainpage = (props) => {
           </Postbox>
         );
       })}
-      <Pagination
-        activePage={page}
-        itemsCountPerPage={itemPerPage}
-        totalItemsCount={totalElementsNum}
-        pageRangeDisplayed={pageNum}
-        onChange={handlePageChange}
-      />
+      <Grid>
+        <Pagination
+          activePage={page}
+          itemsCountPerPage={itemPerPage}
+          totalItemsCount={totalElementsNum}
+          pageRangeDisplayed={pageNum}
+          onChange={handlePageChange}
+        />
+      </Grid>
     </Container>
   );
 };
 
+const Grid = styled.div`
+  width: fit-content;
+  margin: auto;
+`;
+
 const Container = styled.div`
   width: 80%;
   margin: auto;
+  .pagination {
+    display: flex;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  li {
+    margin: 0 8px;
+    display: inline-block;
+    display: flex;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    font-size: 2em;
+    font-weight: 500;
+    transition: 0.2s;
+    &:hover {
+      font-size: 2.5em;
+      font-weight: 800;
+      a {
+        color: #ff7a00;
+      }
+    }
+  }
+
+  li:first-child {
+    border-radius: 20px;
+  }
+  li:last-child {
+    border-radius: 20px;
+  }
+  a {
+    text-decoration: none;
+    color: #333;
+  }
 `;
 const Postbox = styled.div`
   display: flex;
@@ -148,8 +195,9 @@ const Postbox = styled.div`
       flex-direction: column;
 
       p {
-        font-size: 25px;
+        font-size: 30px;
         margin-top: -5px;
+        margin-bottom: 20px;
       }
       span {
         margin-top: -10px;
@@ -188,8 +236,13 @@ const Addbutton = styled.button`
   background-color: #e45826;
   position: fixed;
   bottom: 70px;
-  right: 70px;
+  right: 50px;
   cursor: pointer;
+  text-align: center;
+  div {
+    margin-top: -8px;
+    font-size: 60px;
+  }
 `;
 
 export default Mainpage;

@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { actionCreators2 } from "./redux/modules/post";
 import { useHistory } from "react-router-dom";
+import Permit from "./elements/Permit";
 
 const Detail = () => {
   const history = useHistory();
@@ -15,6 +16,18 @@ const Detail = () => {
   const postId = params.postid;
   const post = useSelector((state) => state.post.detailPost);
   const login_user = useSelector((state) => state.user.user);
+  let frontComplete;
+  let backComplete;
+  if (post?.frontNum === post?.frontCnt) {
+    frontComplete = true;
+  } else {
+    frontComplete = false;
+  }
+  if (post?.backNum === post?.backCnt) {
+    backComplete = true;
+  } else {
+    backComplete = false;
+  }
 
   React.useEffect(() => {
     dispatch(actionCreators2.getDetailPostDB(postId));
@@ -45,11 +58,11 @@ const Detail = () => {
       </div>
       <Titlediv>
         <div>
-          <h1>{post.title}</h1>
+          <Posttitle>{post.title}</Posttitle>
           <span>
             프론트엔드 {post.frontNum}명 | 백엔드 {post.backNum}명
           </span>
-          <span>{post.createdAt}</span>
+          <span style={{ marginLeft: "90px" }}>{post.createdAt}</span>
         </div>
         <div>
           {login_user?.nickName === post.nickName ? (
@@ -72,16 +85,32 @@ const Detail = () => {
       <Contentdiv>
         <p>{post.post_content}</p>
         <div>
-          <button onClick={FEjoinBtnClick}>FE참여하기</button>
-          <button onClick={BEjoinBtnClick}>BE참여하기</button>
+          {frontComplete ? (
+            <Button onClick={FEjoinBtnClick} color="light">
+              FE마감
+            </Button>
+          ) : (
+            <Button onClick={FEjoinBtnClick}>FE참여하기</Button>
+          )}
+          {backComplete ? (
+            <Button onClick={BEjoinBtnClick} color="light">
+              BE마감
+            </Button>
+          ) : (
+            <Button onClick={BEjoinBtnClick}>BE참여하기</Button>
+          )}
         </div>
       </Contentdiv>
-
-      <CommentInput postId={postId} />
+      <Permit>
+        <CommentInput postId={postId} />
+      </Permit>
       <Comments postId={postId} />
     </Container>
   );
 };
+const Posttitle = styled.h1`
+  display: flex;
+`;
 
 const Container = styled.div`
   width: 70%;
@@ -108,12 +137,14 @@ const Titlediv = styled.div`
 `;
 const Smallbutton = styled.button`
   background-color: #e6d5b8;
-  width: 40px;
-  height: 25px;
-  border-radius: 15px;
+  width: 50px;
+  height: 34px;
+  border-radius: 20px;
   border: none;
   color: white;
+  font-size: 16px;
   transition: 0.3s;
+  margin-bottom: -5px;
   &:hover {
     background-color: #ff9b26;
   }
@@ -125,20 +156,21 @@ const SmallBtndiv = styled.div`
 
 const Contentdiv = styled.div`
   border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
   padding: 0px 20px;
   display: flex;
   flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.05);
   p {
     font-size: 17px;
     height: 180px;
   }
   button {
-    background-color: #ff9b26;
+    /* background-color: #ff9b26; */
     border: none;
     border-radius: 9999px;
     width: 100px;
-    height: 50px;
+    height: 100px;
     color: white;
     font-weight: 800;
     font-size: 18px;
